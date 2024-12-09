@@ -6,9 +6,20 @@
       ./packages.nix
     ];
 
- # Bootloader 
- boot.loader.systemd-boot.enable = true;
- boot.loader.efi.canTouchEfiVariables = true;
+ # Enable Audio
+ hardware.pulseaudio.enable = false;
+ sound.enable = true;
+
+ # rtkit is optional but recommended
+ security.rtkit.enable = true;
+
+ services.pipewire = {
+    enable = true;
+
+    alsa.enable = true;
+    pulse.enable = true;
+    jack.enable = true;
+  };
 
  # Your hostname
  networking.hostName = "nix";
