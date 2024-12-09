@@ -9,7 +9,6 @@
     audacity
     chromium
     telegram-desktop
-    alacritty
     obs-studio
     rofi
     wofi
@@ -21,6 +20,7 @@
     zoom-us
     pcmanfm-qt
     polymc
+    handbrake
 
     # Coding stuff
     go
