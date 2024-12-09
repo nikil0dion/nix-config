@@ -36,6 +36,9 @@
  # Hyperland enable
  hyperland.enable = true;
 
+ # Disable IPV6
+ enableIPv6 = false;
+
  # System version 
  system.stateVersion = "24.11";
 }
