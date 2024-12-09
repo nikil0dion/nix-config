@@ -50,6 +50,19 @@
  # Disable IPV6
  enableIPv6 = false;
 
+ # Enable Bluethooth
+ hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+        Experimental = true;
+      };
+    };
+  };
+  services.blueman.enable = true;
+
  # System version 
  system.stateVersion = "24.11";
 }
