@@ -13,6 +13,12 @@
  # rtkit is optional but recommended
  security.rtkit.enable = true;
 
+ # Env defaults
+ environment.variables = {
+   NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
+   };
+
+ # Audio service 
  services.pipewire = {
     enable = true;
 
@@ -49,6 +55,7 @@
    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
  };
 
+ 
  # Enable nix Flakes
  nix.settings.experimental-features = [ "nix-command" "flakes" ]
  
@@ -71,6 +78,10 @@
   };
   services.blueman.enable = true;
 
- # System version 
+ # Shell Fish
+ programs.defaultUserShell = pkgs.fish;
+ programs.fish.enable = true;
+
+# System version 
  system.stateVersion = "24.11";
 }
