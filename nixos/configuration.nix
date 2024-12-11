@@ -18,7 +18,16 @@
  # Env defaults
  environment.variables = {
    NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
-   };
+   NIXOS_OZONE_WL = "1";
+   WLR_NO_HARDWARE_CURSORS = "1";
+   XDG_CACHE_HOME = "$HOME/.cache";   
+   XDG_CONFIG_HOME = "$HOME/.config";
+   XDG_DATA_HOME = "$HOME/.local/share";
+   XDG_STATE_HOME = "$HOME/.local/state";
+   XDG_CURRENT_DESKTOP = "Hyprland";
+   XDG_SESSION_DESKTOP = "Hyprland";
+   XDG_SESSION_TYPE = "wayland";
+};
 
  # Audio service 
  services.pipewire = {
