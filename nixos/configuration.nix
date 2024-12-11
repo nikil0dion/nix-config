@@ -4,6 +4,8 @@
   imports = [
       ./hardware-configuration.nix
       ./packages.nix
+      ./linux-kernel.nix
+      ./display-manager.nix
     ];
 
  # Enable Audio
