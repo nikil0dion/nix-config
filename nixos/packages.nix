@@ -18,7 +18,6 @@
     obsidian
     zoom-us
     pcmanfm-qt
-    polymc
     handbrake
 
     # Coding stuff
@@ -89,7 +88,6 @@
 
     # GPU stuff 
     amdvlk
-    rocm-opencl-icd
     glaxnimate
 
     # Screenshotting
@@ -108,14 +106,4 @@
     xray
   ];
 
-  fonts.packages = with pkgs; [
-    jetbrains-mono
-    noto-fonts
-    noto-fonts-emoji
-    twemoji-color-font
-    font-awesome
-    powerline-fonts
-    powerline-symbols
-    (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
-  ];
 }
