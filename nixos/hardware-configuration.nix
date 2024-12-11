@@ -3,8 +3,8 @@
 { 
   import = [ ];
  
-  boot.tmp.cleanOnBoot = true;
-  boot.tmp.tmpfsSize = "5GB";
+  #boot.tmp.cleanOnBoot = true;
+  #boot.tmp.tmpfsSize = "5GB";
   boot.initrd.availableKernelModules = [
     "ahci"      # SATA controller
     "nvme"      # NVMe SSD support
@@ -15,8 +15,10 @@
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
   # Bootloader 
+  boot.initrd.enable = true;
+  boot.initrd.systemd.enable = true;
   boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  #boot.loader.efi.canTouchEfiVariables = true;
   
   fileSystems."/" = 
     { device = "dev/disk/by-label/NIXROOT";
