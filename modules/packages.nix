@@ -1,7 +1,6 @@
 { pkgs, ... }: {
   nixpkgs.config = {
     allowUnfree = true;
-    permittedInsecurePackages = ["python-2.7.18.8" "electron-25.9.0"];
   };
 
   environment.systemPackages = with pkgs; [
@@ -15,7 +14,6 @@
     wofi
     mpv
     kdenlive
-    discord
     gparted
     obsidian
     zoom-us
@@ -64,17 +62,13 @@
     mako
     gromit-mpx
 
-    # Xorg stuff
-    #xterm
-    #xclip
-    #xorg.xbacklight
-
     # Wayland stuff
     xwayland
     wl-clipboard
     cliphist
 
     # WMs and stuff
+    greetd.tuigreet
     herbstluftwm
     hyprland
     seatd
@@ -105,6 +99,7 @@
     libsForQt5.qtstyleplugin-kvantum
     libsForQt5.qt5ct
     papirus-nord
+    xray
   ];
 
   fonts.packages = with pkgs; [
