@@ -7,8 +7,8 @@
       nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
       systems.url = "github:nix-systems/default-linux";
       hardware.url = "github:nixos/nixos-hardware";
-      disco.url = "github:nix-community/disco";
-      disco.inputs.nixpkgs.follows = "nixpkgs";
+      #disco.url = "github:nix-community/disco";
+      #disco.inputs.nixpkgs.follows = "nixpkgs";
       impermanence.url = "github:nix-community/impormanence";
 
       # Home configurations
@@ -16,8 +16,8 @@
       home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
       # Secureboot
-      lanzabote.url = "github:nix-community/lanzabote/v0.4.1";
-      lanzabote.inputs.nixpkgs.follows = "nixpkgs";
+      #lanzabote.url = "github:nix-community/lanzabote/v0.4.1";
+      #lanzabote.inputs.nixpkgs.follows = "nixpkgs";
 
       # User Theme
       catppuccin.url = "github:catppuccin/nix";
@@ -27,15 +27,19 @@
       aginix.inputs.nixpkgs.follows = "nixpkgs";
 
       # Hyperland
-      hyperland.url = "git+https://github.com/hyprwm/Hyperland?submodules=1";
+      #hyperland.url = "git+https://github.com/hyprwm/Hyperland?submodules=1";
    }
 
  outputs = {self, nixpkgs, home-manager, ... }@inputs: 
-   let
-      user = "nix"
+      
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      specialArgs = { inherit inputs; }; 
       linuxSystems = [ "x86_64-linux" ];
       modules = [ 
          ./configuration.nix
+         ./linux-kernel.nix
+         ./hardware-configuration.nix
+         ./display-manager.nix
          ];
    }      
     
