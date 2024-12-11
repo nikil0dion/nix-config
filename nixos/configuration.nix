@@ -84,6 +84,14 @@
  programs.defaultUserShell = pkgs.fish;
  programs.fish.enable = true;
 
+ # Fonts
+  fonts.packages = with pkgs; [
+    jetbrains-mono
+    nerd-font-patcher
+    noto-fonts-color-emoji
+  ];
+}
+
 # System version 
  system.stateVersion = "24.11";
 }
