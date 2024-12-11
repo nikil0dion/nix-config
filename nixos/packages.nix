@@ -75,6 +75,12 @@
     xdg-desktop-portal-hyprland
     polybar
     waybar
+    pyprland
+    hyprpicker
+    hyprcursor
+    hyprlock
+    hypridle
+    hyprpaper
 
     # Sound
     pipewire
