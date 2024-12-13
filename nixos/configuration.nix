@@ -8,9 +8,6 @@
       ./display-manager.nix
     ];
 
- # Enable Audio
- hardware.pulseaudio.enable = false;
- sound.enable = true;
 
  # rtkit is optional but recommended
  security.rtkit.enable = true;
@@ -44,6 +41,9 @@
  # Enable networking 
  networking.networkmanager.enable = true;
 
+ # Disable ipv6 
+ networking.ipv6 = false;
+
  # Set time zone
  time.timeZone = "UTC";
 
@@ -73,8 +73,6 @@
  # Hyperland enable
  hyperland.enable = true;
 
- # Disable IPV6
- enableIPv6 = false;
 
  # Enable Bluethooth
  hardware.bluetooth = {
