@@ -13,7 +13,7 @@
  security.rtkit.enable = true;
 
  # Env defaults
- environment.variables = {
+ environment.sessionVariables = {
    NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
    NIXOS_OZONE_WL = "1";
    WLR_NO_HARDWARE_CURSORS = "1";
@@ -71,8 +71,8 @@
  nix.settings.experimental-features = [ "nix-command" "flakes" ]
  
  # Hyperland enable
- hyperland.enable = true;
-
+ programs.hyprland.enable = true;
+ programs.hyprland.xwayland.enable = true;
 
  # Enable Bluethooth
  hardware.bluetooth = {
