@@ -2,10 +2,12 @@
 
 { 
   import = [ ];
- 
-  #boot.tmp.cleanOnBoot = true;
-  #boot.tmp.tmpfsSize = "5GB";
- 
+
+  # Clean tmp and create tmpfs  
+  boot.tmp.cleanOnBoot = true;
+  boot.tmp.tmpfsSize = "5GB";
+
+  # Kernel 
   boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" "ehci_pci" "ahci" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
