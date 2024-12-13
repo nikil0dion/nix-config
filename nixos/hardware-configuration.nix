@@ -5,21 +5,19 @@
  
   #boot.tmp.cleanOnBoot = true;
   #boot.tmp.tmpfsSize = "5GB";
-  boot.initrd.availableKernelModules = [
-    "ahci"      # SATA controller
-    "nvme"      # NVMe SSD support
-    "xhci_pci"  # USB 3.0/3.1
-    "amdgpu"    # AMD GPU driver (for Ryzen APUs) 
-    ];
+ 
+  boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" "ehci_pci" "ahci" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
-  # Bootloader 
-  boot.initrd.enable = true;
-  boot.initrd.systemd.enable = true;
-  boot.loader.systemd-boot.enable = true;
-  #boot.loader.efi.canTouchEfiVariables = true;
   
+  # Bootloader
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # Luks 
+  boot.initrd.luks.device."device".device = "/dev/disk/by-uuid/2dfssdew-dsfds-fdfd-fdsd-ddsfdsfdsfP";
+   
   fileSystems."/" = 
     { device = "dev/disk/by-label/NIXROOT";
       fsType = "btrfs";
