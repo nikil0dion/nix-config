@@ -40,9 +40,6 @@
  # Enable networking 
  networking.networkmanager.enable = true;
 
- # Disable ipv6 
- networking.ipv6 = false;
-
  # Set time zone
  time.timeZone = "UTC";
 
