@@ -9,7 +9,6 @@
     firefox
     firefox-esr
     telegram-desktop
-    obs-studio
     rofi
     wofi
     mpv
@@ -41,7 +40,6 @@
     zram-generator
     cava
     zip
-    yt-dlp
     brightnessctl
     swww
     openssl
