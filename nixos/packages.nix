@@ -11,7 +11,7 @@
     telegram-desktop
     rofi
     wofi
-    mpv
+    vlc
     kdenlive
     gparted
     obsidian
