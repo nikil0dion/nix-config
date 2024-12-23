@@ -86,10 +86,6 @@
     pulseaudio
     pamixer
 
-    # GPU stuff 
-    amdvlk
-    glaxnimate
-
     # Screenshotting
     grim
     grimblast
@@ -100,9 +96,7 @@
     # Other
     home-manager
     spice-vdagent
-    libsForQt5.qtstyleplugin-kvantum
-    libsForQt5.qt5ct
-    papirus-nord
+    tokyo-night-gtk
     xray
   ];
 
