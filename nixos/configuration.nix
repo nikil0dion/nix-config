@@ -5,31 +5,30 @@
       ./hardware-configuration.nix
       ./packages.nix
       ./linux-kernel.nix
-      ./display-manager.nix
+      #./display-manager.nix
     ];
 
 
- # rtkit is optional but recommended
+ # Realtime Policy and Watchdog Daemon
  security.rtkit.enable = true;
 
  # Env defaults
  environment.sessionVariables = {
-   NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
+  # NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
    NIXOS_OZONE_WL = "1";
    WLR_NO_HARDWARE_CURSORS = "1";
-   XDG_CACHE_HOME = "$HOME/.cache";   
-   XDG_CONFIG_HOME = "$HOME/.config";
-   XDG_DATA_HOME = "$HOME/.local/share";
-   XDG_STATE_HOME = "$HOME/.local/state";
-   XDG_CURRENT_DESKTOP = "Hyprland";
-   XDG_SESSION_DESKTOP = "Hyprland";
+  # XDG_CACHE_HOME = "$HOME/.cache";   
+  # XDG_CONFIG_HOME = "$HOME/.config";
+  # XDG_DATA_HOME = "$HOME/.local/share";
+  # XDG_STATE_HOME = "$HOME/.local/state";
+  # XDG_CURRENT_DESKTOP = "Hyprland";
+  # XDG_SESSION_DESKTOP = "Hyprland";
    XDG_SESSION_TYPE = "wayland";
 };
 
  # Audio service 
  services.pipewire = {
     enable = true;
-
     alsa.enable = true;
     pulse.enable = true;
     jack.enable = true;
@@ -50,12 +49,29 @@
  # Select internationalisation propertis
  i18n.defaultLocale = "en_US.UTF-8";
 
- # Define a user accout 
+# Enable dconf
+programs.dconf.enable = true;
+
+# Enable X11 windowing system
+services.xserver.enable = true;
+
+# Enable GDM 
+services.xserver.displayManager.gnome.enable = true;
+
+# Enable GNOME
+services.xserver.desktopManager.gnome.enable = true;
+
+
+# Define a user accout 
  users.user.nix = { 
     isNormalUser = true; 
     description = "nix";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = import ./packages.nix;
+    packages = with pkgs; [
+       firefox
+       telegram-desktop
+       vscodium
+  ];
 };
 
  # Steam enable 
@@ -90,6 +106,9 @@
  # Shell Fish
  programs.defaultUserShell = pkgs.fish;
  programs.fish.enable = true;
+
+ # Firefowx browser
+ programs.firefox.enable = true;
 
  # Fonts
   fonts.packages = with pkgs; [
