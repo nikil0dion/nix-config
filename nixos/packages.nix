@@ -65,7 +65,6 @@
     cliphist
 
     # WMs and stuff
-    greetd.tuigreet
     herbstluftwm
     hyprland
     seatd
