@@ -6,6 +6,7 @@
       ./packages.nix
       ./linux-kernel.nix
       ./security.nix
+      ./programs.nix
     ];
 
  # Env defaults
@@ -40,9 +41,6 @@
  # Select internationalisation propertis
  i18n.defaultLocale = "en_US.UTF-8";
 
-# Enable dconf
-programs.dconf.enable = true;
-
 # Enable X11 windowing system
 services.xserver.enable = true;
 
@@ -76,10 +74,6 @@ services.xserver.desktopManager.gnome.enable = true;
  
  # Enable nix Flakes
  nix.settings.experimental-features = [ "nix-command" "flakes" ]
- 
- # Hyperland enable
- programs.hyprland.enable = true;
- programs.hyprland.xwayland.enable = true;
 
  # Enable Bluethooth
  hardware.bluetooth = {
@@ -93,13 +87,6 @@ services.xserver.desktopManager.gnome.enable = true;
     };
   };
   services.blueman.enable = true;
-
- # Shell Fish
- programs.defaultUserShell = pkgs.fish;
- programs.fish.enable = true;
-
- # Firefowx browser
- programs.firefox.enable = true;
 
  # Fonts
   fonts.packages = with pkgs; [
