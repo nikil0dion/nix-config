@@ -83,8 +83,6 @@
 
     # Sound
     pipewire
-    pulseaudio
-    pamixer
 
     # Screenshotting
     grim
