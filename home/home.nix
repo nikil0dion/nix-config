@@ -17,34 +17,29 @@
     
     #User Apps
     celluloid
-    discord
+    firefox
+    firefox-esr
     librewolf
-    cool-retro-term
-    bibata-cursors
-    vscode
-    lollypop
-    lutris
-    openrgb
-    betterdiscord-installer
+    go
+    vscodium
+    vulkan-headers
     
 
     #utils
     ranger
     wlr-randr
-    git
-    rustup
-    gnumake
     catimg
     curl
+    git
     appimage-run
     xflux
     dunst
     pavucontrol
-    sqlite
+    kubectl
+    docker
 
     #misc 
     cava
-    neovim
     nano
     rofi
     nitch
@@ -52,7 +47,6 @@
     grim
     slurp
     wl-clipboard
-    pamixer
     mpc-cli
     tty-clock
     exa
