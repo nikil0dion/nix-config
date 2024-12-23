@@ -8,4 +8,6 @@
    # Polkit enable
    security.polkit.enable = true;
 
+   # Hyperlock screen 
+   security.pam.services.hyprlock = { };
 }
