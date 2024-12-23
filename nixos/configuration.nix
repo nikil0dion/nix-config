@@ -7,6 +7,7 @@
       ./linux-kernel.nix
       ./security.nix
       ./programs.nix
+      ./services.nix
     ];
 
  # Env defaults
@@ -21,14 +22,6 @@
   # XDG_SESSION_DESKTOP = "Hyprland";
 };
 
- # Audio service 
- services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-
  # Your hostname
  networking.hostName = "nix";
 
@@ -41,18 +34,8 @@
  # Select internationalisation propertis
  i18n.defaultLocale = "en_US.UTF-8";
 
-# Enable X11 windowing system
-services.xserver.enable = true;
-
-# Enable GDM 
-services.xserver.displayManager.gnome.enable = true;
-
-# Enable GNOME
-services.xserver.desktopManager.gnome.enable = true;
-
-
 # Define a user accout 
- users.user.nix = { 
+ users.user.nixos = { 
     isNormalUser = true; 
     description = "nix";
     extraGroups = [ "networkmanager" "wheel" ];
@@ -71,22 +54,8 @@ services.xserver.desktopManager.gnome.enable = true;
    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
  };
 
- 
  # Enable nix Flakes
  nix.settings.experimental-features = [ "nix-command" "flakes" ]
-
- # Enable Bluethooth
- hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-    settings = {
-      General = {
-        Enable = "Source,Sink,Media,Socket";
-        Experimental = true;
-      };
-    };
-  };
-  services.blueman.enable = true;
 
  # Fonts
   fonts.packages = with pkgs; [
