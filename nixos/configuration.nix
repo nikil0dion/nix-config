@@ -8,10 +8,6 @@
       #./display-manager.nix
     ];
 
-
- # Realtime Policy and Watchdog Daemon
- security.rtkit.enable = true;
-
  # Env defaults
  environment.sessionVariables = {
   # NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
