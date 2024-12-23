@@ -16,8 +16,6 @@
     kdenlive
     gparted
     obsidian
-    zoom-us
-    pcmanfm-qt
     handbrake
 
     # Coding stuff
