@@ -5,7 +5,6 @@
       ./hardware-configuration.nix
       ./packages.nix
       ./linux-kernel.nix
-      #./display-manager.nix
     ];
 
  # Env defaults
