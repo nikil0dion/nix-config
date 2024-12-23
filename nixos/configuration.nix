@@ -5,6 +5,7 @@
       ./hardware-configuration.nix
       ./packages.nix
       ./linux-kernel.nix
+      ./security.nix
     ];
 
  # Env defaults
