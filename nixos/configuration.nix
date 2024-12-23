@@ -10,7 +10,6 @@
 
  # Env defaults
  environment.sessionVariables = {
-  # NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
    NIXOS_OZONE_WL = "1";
    WLR_NO_HARDWARE_CURSORS = "1";
   # XDG_CACHE_HOME = "$HOME/.cache";   
@@ -19,7 +18,6 @@
   # XDG_STATE_HOME = "$HOME/.local/state";
   # XDG_CURRENT_DESKTOP = "Hyprland";
   # XDG_SESSION_DESKTOP = "Hyprland";
-   XDG_SESSION_TYPE = "wayland";
 };
 
  # Audio service 
