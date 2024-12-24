@@ -24,8 +24,11 @@
     aginix.url = "github:ryantm/agenix";
     aginix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Hyperland
-    #hyperland.url = "git+https://github.com/hyprwm/Hyperland?submodules=1";
+    # Tokyo Night theme
+    tokyonight-gtk-theme.url = "github:Fausto-Korpsvart/Tokyonight-GTK-Theme";
+
+    # Hyprland
+    hyprland.url = "git+https://github.com/hyprwm/Hyperland?submodules=1";
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
