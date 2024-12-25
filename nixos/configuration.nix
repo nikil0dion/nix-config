@@ -38,12 +38,7 @@
  users.user.nixos = { 
     isNormalUser = true; 
     description = "nix";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-       firefox
-       telegram-desktop
-       vscodium
-  ];
+    extraGroups = [ "networkmanager" ];
 };
 
  # Steam enable 
