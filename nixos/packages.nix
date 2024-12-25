@@ -5,7 +5,6 @@
 
   environment.systemPackages = with pkgs; [
     # Desktop apps
-    audacity
     firefox
     firefox-esr
     telegram-desktop
@@ -74,7 +73,6 @@
     hyprcursor
     hyprlock
     hypridle
-    hyprpaper
 
     # Sound
     pipewire
