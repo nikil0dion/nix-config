@@ -2,7 +2,6 @@
 
   imports = [
     hyprland.homeManagerModules.default
-    #./environment
     ./programs
     ./scripts
     ./themes
@@ -15,43 +14,91 @@
 
   home.packages = (with pkgs; [
     
-    #User Apps
-    celluloid
+    # Desktop apps
     firefox
     firefox-esr
-    librewolf
+    telegram-desktop
+    rofi
+    wofi
+    vlc
+    kdenlive
+    gparted
+    obsidian
+    handbrake
+
+    # Coding stuff
     go
     vscodium
-    vulkan-headers
-    
 
-    #utils
-    ranger
-    wlr-randr
-    catimg
-    curl
-    git
-    appimage-run
-    xflux
-    dunst
-    pavucontrol
-    kubectl
-    docker
-
-    #misc 
-    cava
-    nano
-    rofi
-    nitch
+    # CLI utils
+    neofetch
+    file
+    tree
     wget
-    grim
-    slurp
+    git
+    fastfetch
+    htop
+    nix-index
+    unzip
+    scrot
+    ffmpeg
+    light
+    lux
+    mediainfo
+    ranger
+    zram-generator
+    cava
+    zip
+    brightnessctl
+    swww
+    openssl
+    lazygit
+    bluez
+    bluez-tools
+    docker
+    kubectl
+
+    # GUI utils
+    feh
+    imv
+    dmenu
+    screenkey
+    mako
+    gromit-mpx
+
+    # Wayland stuff
+    xwayland
     wl-clipboard
-    mpc-cli
-    tty-clock
-    exa
-    btop
+    cliphist
+
+    # WMs and stuff
+    herbstluftwm
+    hyprland
+    seatd
+    xdg-desktop-portal-hyprland
+    polybar
+    waybar
+    pyprland
+    hyprpicker
+    hyprcursor
+    hyprlock
+    hypridle
+
+    # Sound
+    pipewire
+
+    # Screenshotting
+    grim
+    grimblast
+    slurp
+    flameshot
+    swappy
+
+    # Other
+    home-manager
+    spice-vdagent
     tokyo-night-gtk
+    xray
 
   ]) ++ (with pkgs.gnome; [ 
     nautilus
@@ -67,7 +114,7 @@
     };
 
     "org/gnome/shell/extensions/user-theme" = {
-      name = "Tokyonight-Dark-B-LB";
+      name = "Tokyonight-Dark-Storm-BL-MB";
     };
   };
 
