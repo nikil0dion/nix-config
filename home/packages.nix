@@ -11,7 +11,6 @@
     rofi
     wofi
     vlc
-    kdenlive
     gparted
     obsidian
     handbrake
@@ -21,6 +20,7 @@
     vscodium
 
     # CLI utils
+    lsd
     neofetch
     file
     tree
@@ -55,6 +55,7 @@
     screenkey
     mako
     gromit-mpx
+    httpie
 
     # Wayland stuff
     xwayland
@@ -89,6 +90,7 @@
     spice-vdagent
     tokyo-night-gtk
     xray
+    nekoray
   ];
 
 }
