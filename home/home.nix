@@ -1,14 +1,15 @@
-{ hyprland, pkgs, ...}: {
+{ config, pkgs, ...}: {
 
   imports = [
-    hyprland.homeManagerModules.default
     ./programs
-    ./scripts
-    ./themes
   ];
 
- home-manager.users.nixos = {
-  enable = true;
+  home = {
+    username = "nixos";
+    homeDirectory = "/home/nixos";
+    stateVersion = "24.11";
+
+  };
 
   programs.bash = {
     enable = true;
@@ -27,7 +28,7 @@
       lt = "lsd -ltrh"; # Sort by date
       cpr = "cp -r";
       mvr = "mv -r";
-      [".."] = "cd ../"; # Special case for ".."
+      [".."] = "cd ../"; 
       ["..."] = "cd ../../";
       ["...."] = "cd ../../../";
       jctl = "journalctl -p 3 -xb";
@@ -56,6 +57,4 @@
       name = "Tokyonight-Dark-BL";
     };
   };
-
-  home.stateVersion = "24.11";
 }
