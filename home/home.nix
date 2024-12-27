@@ -144,11 +144,7 @@
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
-    extraConfig =
-      let
-        modifier = "";
-      in
-      concatStrings [
+    extraConfig = [
         ''
           env = NIXOS_OZONE_WL, 1
           env = NIXPKGS_ALLOW_UNFREE, 1
