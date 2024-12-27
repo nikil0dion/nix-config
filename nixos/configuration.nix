@@ -47,20 +47,11 @@
    # Hyperlock screen 
    security.pam.services.hyprlock = { };
 
-  #services.xserver.videoDrivers = [ "amdgpu" ];
-
   # Enable unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # Enable the general xdg-desktop-portal service
   xdg.autostart.enable = true;
-
-  # OpenGL
-  hardware.opengl = {
-    enable = true;  # Enable OpenGL
-    driSupport = true;  # Enable DRI (Direct Rendering Infrastructure)
-    driSupport32Bit = true;  # Enable 32-bit DRI support for compatibility
-  };
 
 # System version 
  system.stateVersion = "24.11";
