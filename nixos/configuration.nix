@@ -8,7 +8,7 @@
     ];
 
  # Your hostname
- networking.hostName = "nix";
+ networking.hostName = "nixos";
 
  # Enable networking 
  networking.networkmanager.enable = true;
@@ -28,9 +28,13 @@
     description = "nix";
     extraGroups = [ "networkmanager" "wheel" ];
 };
+ 
+ programs.firefox.enable = true;
+ programs.dconf.enable = true;
 
  # Enable nix Flakes
  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
  # Fonts
   fonts.packages = with pkgs; [
     jetbrains-mono
