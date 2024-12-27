@@ -6,7 +6,7 @@
    services.xserver.enable = true;
 
    # Enable GDM 
-   services.xserver.displayManager.gnome.enable = true;
+   services.xserver.displayManager.gdm.enable = true;
 
    # Enable GNOME
    services.xserver.desktopManager.gnome.enable = true;
@@ -30,6 +30,7 @@
         };
       };
     };
+ 
     services.blueman.enable = true; 
 
 }
