@@ -51,6 +51,9 @@
 
   #services.xserver.videoDrivers = [ "amdgpu" ];
 
+  # Enable unfree packages
+  nixpkgs.config.allowUnfree = true;
+  
   # OpenGL
   hardware.opengl = {
     enable = true;  # Enable OpenGL
