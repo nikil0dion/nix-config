@@ -1,8 +1,6 @@
 { config, pkgs, ...}: {
 
-  imports = [
-    ./programs
-  ];
+  imports = [ ];
 
   home = {
       username = "nixos";
@@ -13,6 +11,7 @@
           BROWSER = "firefox";
           NIXOS_OZONE_WL = "1";
           TERMINAL = "wezterm";
+          XDG_SESSION_TYPE = "wayland";
       };
       packages = with pkgs; [
           # Desktop apps
