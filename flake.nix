@@ -13,33 +13,36 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Secureboot
-    #lanzabote.url = "github:nix-community/lanzabote/v0.4.1";
-    #lanzabote.inputs.nixpkgs.follows = "nixpkgs";
-
-    # User Theme
-    catppuccin.url = "github:catppuccin/nix";
-
     # SSH secrets app
     aginix.url = "github:ryantm/agenix";
     aginix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Tokyo Night theme
-    # tokyonight-gtk-theme.url = "github:Fausto-Korpsvart/Tokyonight-GTK-Theme";
-
-    # Hyprland
+    # Hyperland
     hyprland.url = "github:hyprwm/Hyprland";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./configuration.nix
-        ./linux-kernel.nix
-        ./hardware-configuration.nix
-        ./display-manager.nix
-      ];
-    };
-  };
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: 
+    let
+       system = "x86_64-linux";
+       host = "nix";
+       username = "nixos";
+        in {
+          nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+               specialArgs = {
+                 inherit system;
+                 inherit inputs;
+                 inherit username;
+                 inherit host;
+                };
+               modules = [
+               ./configuration.nix
+               home-manager.nixosModules.home-manager {
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.useUserPackages = true;
+                  home-manager.users.nixos = import ./home.nix;
+       }
+     ];
+   };
+ };
 }
+
