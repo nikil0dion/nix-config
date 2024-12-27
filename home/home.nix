@@ -7,106 +7,43 @@
     ./themes
   ];
 
-  home = {
-    username = "nixos";
-    homeDirectory = "/home/nixos";
+ home-manager.users.nixos = {
+  enable = true;
+
+  programs.bash = {
+    enable = true;
+
+    shellAliases = {
+      k = "kubectl";
+      s = "systemctl";
+      dc = "docker compose";
+      d = "docker";
+      df = "df -hT";
+      dush = "du -shm | sort -rh";
+      ls = "lsd --color=auto";
+      la = "lsd -a"; # Hidden files
+      lx = "lsd -lXh"; # Sort by extension
+      lk = "lsd -lSrh"; # Sort by size
+      lr = "lsd -lRh"; # Recursive ls
+      lt = "lsd -ltrh"; # Sort by date
+      cpr = "cp -r";
+      mvr = "mv -r";
+      [".."] = "cd ../"; # Special case for ".."
+      ["..."] = "cd ../../";
+      ["...."] = "cd ../../../";
+      jctl = "journalctl -p 3 -xb";
+      grep = "grep --color=auto";
+      egrep = "egrep --color=auto";
+      fgrep = "fgrep --color=auto";
+      sst = "ss -tulpn";
+      lsf = "lsof -i -P";
+      ping = "ping -c 10";
+    };
+
+    bashrcExtra = ''
+      . ~/.bashrc
+    '';
   };
-
-  home.packages = (with pkgs; [
-    
-    # Desktop apps
-    firefox
-    firefox-esr
-    telegram-desktop
-    rofi
-    wofi
-    vlc
-    kdenlive
-    gparted
-    obsidian
-    handbrake
-
-    # Coding stuff
-    go
-    vscodium
-
-    # CLI utils
-    neofetch
-    file
-    tree
-    wget
-    git
-    fastfetch
-    htop
-    nix-index
-    unzip
-    scrot
-    ffmpeg
-    light
-    lux
-    mediainfo
-    ranger
-    zram-generator
-    cava
-    zip
-    brightnessctl
-    swww
-    openssl
-    lazygit
-    bluez
-    bluez-tools
-    docker
-    kubectl
-
-    # GUI utils
-    feh
-    imv
-    dmenu
-    screenkey
-    mako
-    gromit-mpx
-
-    # Wayland stuff
-    xwayland
-    wl-clipboard
-    cliphist
-
-    # WMs and stuff
-    herbstluftwm
-    hyprland
-    seatd
-    xdg-desktop-portal-hyprland
-    polybar
-    waybar
-    pyprland
-    hyprpicker
-    hyprcursor
-    hyprlock
-    hypridle
-
-    # Sound
-    pipewire
-
-    # Screenshotting
-    grim
-    grimblast
-    slurp
-    flameshot
-    swappy
-
-    # Other
-    home-manager
-    spice-vdagent
-    tokyo-night-gtk
-    xray
-
-  ]) ++ (with pkgs.gnome; [ 
-    nautilus
-    zenity
-    gnome-tweaks
-    eog
-    gedit
-  ]);
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {
@@ -114,11 +51,9 @@
     };
 
     "org/gnome/shell/extensions/user-theme" = {
-      name = "Tokyonight-Dark-Storm-BL-MB";
+      name = "Tokyonight-Dark-BL";
     };
   };
 
-  programs.home-manager.enable = true;
-
-  home.stateVersion = "23.11";
+  home.stateVersion = "24.11";
 }
