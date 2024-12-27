@@ -35,6 +35,13 @@
  # Enable nix Flakes
  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+# Default minimal
+environment.systemPackages = with pkgs; [
+  git
+  curl
+  htop
+];
+
  # Fonts
   fonts.packages = with pkgs; [
     jetbrains-mono
