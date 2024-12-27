@@ -12,7 +12,6 @@
 
   programs.bash = {
     enable = true;
-
     shellAliases = {
       k = "kubectl";
       s = "systemctl";
@@ -39,11 +38,14 @@
       lsf = "lsof -i -P";
       ping = "ping -c 10";
     };
-
     bashrcExtra = ''
       . ~/.bashrc
     '';
   };
+ 
+  programs.wezterm.enable = true;
+  
+  
 
   dconf.settings = {
     "org/gnome/desktop/interface" = {
