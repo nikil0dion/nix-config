@@ -8,6 +8,7 @@
     systems.url = "github:nix-systems/default-linux";
     hardware.url = "github:nixos/nixos-hardware";
     impermanence.url = "github:nix-community/impermanence";
+    nixgl.url = "github:nix-community/nixGL";
 
     # Home configurations
     home-manager.url = "github:nix-community/home-manager";
@@ -17,8 +18,14 @@
     aginix.url = "github:ryantm/agenix";
     aginix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Hyperland
+    # Hyprland
     hyprland.url = "github:hyprwm/Hyprland";
+    hyprpicker.url = "github:hyprwm/hyprpicker";
+
+    # Wezterm
+    wezterm.url = "github:wez/wezterm?dir=nix";
+
+    # N
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: 
