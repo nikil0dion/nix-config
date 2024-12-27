@@ -21,7 +21,7 @@
   boot.initrd.luks.device."device".device = "/dev/disk/by-uuid/2dfssdew-dsfds-fdfd-fdsd-ddsfdsfdsfP";
    
   fileSystems."/" = 
-    { device = "dev/disk/by-label/NIXROOT";
+    { device = "/dev/disk/by-label/NIXROOT";
       fsType = "btrfs";
     };
 
@@ -32,8 +32,7 @@
 
    swapDevices = [
     {
-      device = "/swap/swapfile";
-      size = 8196;
+      device = "/dev/disk/by-label/SWAP";
     }
   ];
 }
