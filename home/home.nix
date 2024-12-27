@@ -122,9 +122,9 @@
       lt = "lsd -ltrh"; # Sort by date
       cpr = "cp -r";
       mvr = "mv -r";
-      [".."] = "cd ../"; 
-      ["..."] = "cd ../../";
-      ["...."] = "cd ../../../";
+      ".." = "cd ../"; 
+      "..." = "cd ../../";
+      "...." = "cd ../../../";
       jctl = "journalctl -p 3 -xb";
       grep = "grep --color=auto";
       egrep = "egrep --color=auto";
