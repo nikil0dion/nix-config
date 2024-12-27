@@ -15,7 +15,6 @@
       };
       packages = with pkgs; [
           # Desktop apps
-          firefox
           firefox-esr
           telegram-desktop
           brave
@@ -103,6 +102,7 @@
           xray
           nekoray
         ];
+   };
 
 
   programs.bash = {
@@ -140,12 +140,10 @@
  
   programs.wezterm.enable = true;
 
-  wayland.windowManager.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-    systemd.enable = true;
-    extraConfig = [
-        ''
+  wayland.windowManager.hyprland.enable = true;
+  wayland.windowManager.hyprland.xwayland.enable = true;
+  wayland.windowManager.hyprland.systemd.enable = true;
+  wayland.windowManager.hyprland.extraConfig = ''
           env = NIXOS_OZONE_WL, 1
           env = NIXPKGS_ALLOW_UNFREE, 1
           env = XDG_CURRENT_DESKTOP, Hyprland
@@ -301,13 +299,9 @@
           bind = ,XF86AudioPrev, exec, playerctl previous
           bind = ,XF86MonBrightnessDown,exec,brightnessctl set 5%-
           bind = ,XF86MonBrightnessUp,exec,brightnessctl set +5%
-        ''
-      ];
-    };
+        '';
 
   
-  programs.dcof.enable = true;
-
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
