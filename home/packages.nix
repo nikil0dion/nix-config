@@ -8,6 +8,7 @@
     firefox
     firefox-esr
     telegram-desktop
+    brave
     rofi
     wofi
     vlc
