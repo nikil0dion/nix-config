@@ -4,6 +4,7 @@
   imports = [
       ./hardware-configuration.nix
       ./linux-kernel.nix
+      ./services.nix
     ];
 
  # Your hostname
