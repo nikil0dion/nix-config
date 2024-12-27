@@ -12,6 +12,9 @@
  # Enable networking 
  networking.networkmanager.enable = true;
 
+ # Network Time server 
+ networking.timeServers = [ "pool.ntp.org" ];
+
  # Set time zonenanop
  time.timeZone = "UTC";
 
