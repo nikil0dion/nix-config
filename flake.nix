@@ -21,6 +21,9 @@
     # Hyprland
     hyprland.url = "github:hyprwm/Hyprland";
     hyprpicker.url = "github:hyprwm/hyprpicker";
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
 
     # Wezterm
     wezterm.url = "github:wez/wezterm?dir=nix";
