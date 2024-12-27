@@ -104,6 +104,13 @@
         ];
    };
 
+  # Create XDG Dirs
+  xdg = {
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
+  };
 
   programs.bash = {
     enable = true;
