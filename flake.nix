@@ -24,31 +24,29 @@
     hyprland-plugins = {
       url = "github:hyprwm/hyprland-plugins";
       inputs.hyprland.follows = "hyprland";
-
+      };
     # Wezterm
     wezterm.url = "github:wez/wezterm?dir=nix";
 
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: 
-    let
-       system = "x86_64-linux";
-       host = "nix";
-       username = "nixos";
-        in {
-          nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-               specialArgs = {
-                 inherit system inputs username host;
-                };
+  outputs = { self, nixpkgs, home-manager, ... } : 
+      let
+        system = "x86_64-linux";
+        host = "nixos";
+        username = "nixos";
+        in 
+         {
+           nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+               specialArgs = { inherit system username host; };
                modules = [
-               ./configuration.nix # System configuration file
+               ./configuration.nix 
                home-manager.nixosModules.home-manager {
                   home-manager.useGlobalPkgs = true;
                   home-manager.useUserPackages = true;
-                  home-manager.users.nixos = import ./home/home.nix; # Home-Manager configuration file
-       }
-     ];
+                  home-manager.users.nixos = import ./home.nix;
+         }
+       ];
+     };
    };
- };
-}
-
+ }
