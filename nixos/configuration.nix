@@ -41,6 +41,7 @@
 
   services.xserver.videoDrivers = [ "amdgpu" ];
 
+  # OpenGL
   hardware.opengl = {
     enable = true;  # Enable OpenGL
     driSupport = true;  # Enable DRI (Direct Rendering Infrastructure)
