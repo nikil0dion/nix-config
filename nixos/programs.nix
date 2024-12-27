@@ -10,9 +10,9 @@
   programs.hyprland.xwayland.enable = true;
   programs.waybar.enable = true;
   
-  # Shell Fish
-  programs.defaultUserShell = pkgs.fish;
-  programs.fish.enable = true;
+  # Shell Bash
+  programs.defaultUserShell = pkgs.bash;
+  programs.bash.enable = true;
 
   # Firefox browser
   programs.firefox.enable = true;
