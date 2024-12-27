@@ -53,6 +53,15 @@
 
   # Enable unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # Enable the general xdg-desktop-portal service
+  services.xdg-desktop-portal.enable = true;
+
+  # Enable xdg-desktop-portal-hyprland for Hyprland compatibility
+  services.xdg-desktop-portal-hyprland.enable = true;
+
+  # If you are using Hyprland as your compositor, make sure it's enabled:
+  services.xserver.windowManager.hyprland.enable = true;
   
   # OpenGL
   hardware.opengl = {
