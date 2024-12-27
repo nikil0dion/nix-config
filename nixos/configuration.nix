@@ -39,6 +39,20 @@
   ];
 }
 
+  services.xserver.videoDrivers = [ "amdgpu" ];
+
+  hardware.opengl = {
+    enable = true;  # Enable OpenGL
+    driSupport = true;  # Enable DRI (Direct Rendering Infrastructure)
+    driSupport32Bit = true;  # Enable 32-bit DRI support for compatibility
+  };
+
+# Vulkan support
+  hardware.vulkan = {
+    enable = true;
+    drivers = [ "amdvlk" ];  # Use AMD's Vulkan driver
+  };
+
 # System version 
  system.stateVersion = "24.11";
 }
