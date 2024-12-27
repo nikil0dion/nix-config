@@ -8,7 +8,11 @@
     username = "nixos";
     homeDirectory = "/home/nixos";
     stateVersion = "24.11";
-
+    sessionVariables = {
+        EDITOR = "nano";
+        BROWSER = "firefox";
+        NIXOS_OZONE_WL = "1";
+        TERMINAL = "wezterm";
   };
 
   programs.bash = {
