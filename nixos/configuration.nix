@@ -39,7 +39,16 @@
   ];
 }
 
-  services.xserver.videoDrivers = [ "amdgpu" ];
+   # Realtime Policy and Watchdog Daemon
+   security.rtkit.enable = true;
+
+   # Polkit enable
+   security.polkit.enable = true;
+
+   # Hyperlock screen 
+   security.pam.services.hyprlock = { };
+
+  #services.xserver.videoDrivers = [ "amdgpu" ];
 
   # OpenGL
   hardware.opengl = {
