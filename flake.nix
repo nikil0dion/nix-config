@@ -25,7 +25,6 @@
     # Wezterm
     wezterm.url = "github:wez/wezterm?dir=nix";
 
-    # N
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: 
