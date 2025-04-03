@@ -175,5 +175,7 @@ nano /etc/nixos/home.nix
    };
 }
 
+# 🚀 Of course need rebuild OS after add file
+nixos-rebuild switch
 ```
 
