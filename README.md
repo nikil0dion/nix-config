@@ -146,7 +146,7 @@ And restart your system and now login your new user
 ## 7. 📦 Install Packages 
 
 You can go 2 ways
-1. the easiest
+1. Easy \n
 go to the site `search.nixos.org/packages`
 find the desired application
 and install it `nix-env -iA nixos.dnf`
