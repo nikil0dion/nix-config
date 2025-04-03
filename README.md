@@ -146,8 +146,34 @@ And restart your system and now login your new user
 ## 7. 📦 Install Packages 
 
 You can go 2 ways
-1. Easy
-2. go to the site `search.nixos.org/packages`
-3. find the desired application
-4. and install it `nix-env -iA nixos.dnf`
+
+1. Easy 😎
+- go to the site `search.nixos.org/packages`
+- find the desired application
+- and install it `nix-env -iA nixos.dnf`
+
+2. Hard 💪
+```
+# Create base home.nix
+nano /etc/nixos/home.nix
+
+# Paste and modify this template in /etc/nixos/home.nix
+{ config, pkgs, ... }: {
+
+  imports = [ ];
+
+  home = {
+      username = "your_username";  # 👤 Your username
+      homeDirectory = "/home/your_username";  # 🏠 Home directory
+      stateVersion = "24.11";  # 📅 State version
+      packages = with pkgs; [
+          # 🧑‍💻 ALL THE PROGRAMS YOU WANT TO INSTALL, SEARCH NIXOS PACKAGES 
+          firefox  # 🌍 Firefox
+          brave  # 🦸 Brave
+          ...  # 🔄 Add other packages you need
+      ];
+   };
+}
+
+```
 
