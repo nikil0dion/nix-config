@@ -111,3 +111,31 @@ cd /mnt
 sudo nixos-install  
 ```
 
+## 6. 🔧 Configure after installation
+
+If you add a user via configuration.nix and then do a nixos-rebuild switch, you won't be able to log into the user because it doesn't have a password, so it's easier to create the user the old fashioned way 👴
+
+```sh
+# 👤 Create a new user  
+useradd -m -G wheel -s /bin/bash your_username  
+
+# 🔑 Set a password for the user  
+passwd your_username  
+
+# 🔓 Grant sudo privileges (optional)  
+echo "your_username ALL=(ALL) ALL" | sudo tee -a /etc/sudoers.d/your_username
+
+# ✏️ Uncomment line an change your new username
+nano /etc/nixos/configuration.nix
+
+# 📦 Change Add user in group vboxusers
+users.extraGroups.vboxusers.members = [ "your_username" ];
+
+# 🐳 Change Add user in group docker
+users.extraGroups.docker.members = [ "your_username" ];
+
+# 🚀 And rebuild
+nixos-rebuild switch
+```
+
+
