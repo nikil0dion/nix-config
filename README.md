@@ -139,5 +139,15 @@ users.extraGroups.docker.members = [ "your_username" ];
 # 🚀 And rebuild
 nixos-rebuild switch
 ```
+And restart your system and now login your new user 
 
+---
+
+## 7. 📦 Install Packages 
+
+You can go 2 ways
+1. the easiest
+go to the site `search.nixos.org/packages`
+find the desired application
+and install it `nix-env -iA nixos.dnf`
 
