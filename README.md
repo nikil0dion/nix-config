@@ -54,6 +54,7 @@ w (write)
 
 ## 🛠️ Create Filesystem and Label Partitions  
 
+
 ```sh
 # 📀 Label FAT  
 lsblk  # Check your /dev/sdX
