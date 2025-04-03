@@ -1,6 +1,6 @@
 # ~/.bash_profile
 
-# Загружать .bashrc, если он существует
+# Load .bashrc
 if [ -f "$HOME/.bashrc" ]; then
     source "$HOME/.bashrc"
 fi
