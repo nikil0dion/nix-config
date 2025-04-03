@@ -63,7 +63,8 @@ w (write)
 ## 3. 🛠️ Create Filesystem and Label Partitions  
 
 all actions should be done in root ❗
-su root ✈️
+
+`su root` ✈️
 
 ```sh
 # 📀 Label FAT  
