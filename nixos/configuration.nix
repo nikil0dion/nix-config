@@ -1,69 +1,91 @@
-{ config, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
-{ 
-  imports = [
+{
+  imports =
+    [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./linux-kernel.nix
-      ./services.nix
     ];
 
- # Your hostname
- networking.hostName = "nixos";
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  
+  # Hostname
+  networking.hostName = "nixos"; # Define your hostname.
 
- # Enable networking 
- networking.networkmanager.enable = true;
+  # Network
+  networking.networkmanager.enable = true;  
 
- # Network Time server 
- networking.timeServers = [ "pool.ntp.org" ];
+  # Set your time zone.
+  time.timeZone = "Europe/Moscow";
 
- # Set time zonenanop
- time.timeZone = "UTC";
+  # Virtualization Docker and Vmbox
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "nikilodion" ];
+  virtualisation.virtualbox.guest.enable = true;
+  virtualisation.virtualbox.guest.dragAndDrop = true;
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "btrfs";
+  users.extraGroups.docker.members = [ "nikilodion" ];
+  virtualisation.docker.rootless = {
+  	enable = true;
+  	setSocketVariable = true;
+  };
 
- # Select internationalisation propertis
- i18n.defaultLocale = "en_US.UTF-8";
+  # Gaaame
+  programs.steam = {
+  	enable = true;
+  	remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+  	dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+  	localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  };
 
-# Define a user accout 
- users.users.nixos = { 
-    isNormalUser = true; 
-    description = "nix";
-    extraGroups = [ "networkmanager" "wheel" ];
-};
- 
- programs.firefox.enable = true;
- programs.dconf.enable = true;
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
 
- # Enable nix Flakes
- nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # Enable the X11 and wayland windowing system.
+  services.xserver.enable = true;
 
-# Default minimal
-environment.systemPackages = with pkgs; [
-  git
-  curl
-  htop
-];
+  # Enable Gnome
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm.wayland = true;
+  services.xserver.desktopManager.gnome.enable = true;
 
- # Fonts
+  # Fonts 
   fonts.packages = with pkgs; [
     jetbrains-mono
     nerd-font-patcher
     noto-fonts-color-emoji
   ];
 
-   # Realtime Policy and Watchdog Daemon
-   security.rtkit.enable = true;
+  # Configure keymap in X11
+  services.xserver.xkb.layout = "us";
 
-   # Polkit enable
-   security.polkit.enable = true;
+  # Enable sound jack 
+   services.pipewire = {
+     enable = true;
+     alsa.enable = true;
+     jack.enable = true;
+     pulse.enable = true;
+   };
 
-   # Hyperlock screen 
-   security.pam.services.hyprlock = { };
+  programs.firefox.enable = true;
+  programs.dconf.enable = true;
 
-  # Enable unfree packages
-  nixpkgs.config.allowUnfree = true;
+  # Minimal packages 
+   environment.systemPackages = with pkgs; [
+     wget
+     git
+     curl
+     htop
+  ];
 
-  # Enable the general xdg-desktop-portal service
-  xdg.autostart.enable = true;
+  # Security mod
+  security.rtkit.enable = true;
+  security.polkit.enable = true;
 
-# System version 
- system.stateVersion = "24.11";
+  # Version
+  system.stateVersion = "24.11";
+
 }
