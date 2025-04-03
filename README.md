@@ -32,6 +32,7 @@ sudo dhclient wlp2s0
 # Test network 
 ping google.com
 ```
+---
 
 ## 2. 📀 Disk UEFI partition 
 
@@ -52,8 +53,12 @@ default (fill up partition)
 w (write)
 ```
 
+---
+
 ## 3. 🛠️ Create Filesystem and Label Partitions  
 
+all actions should be done in root ❗
+su root ✈️
 
 ```sh
 # 📀 Label FAT  
@@ -64,7 +69,7 @@ fatlabel /dev/sdX1 NIXBOOT
 # 🔒 Create LUKS Btrfs  
 cryptsetup -y -v --type luks2 luksFormat /dev/sdX2  
 cryptsetup luksOpen /dev/sdX2 space  
-cryptsetup -v status space  
+cryptsetup -v status space # Check it's ok
 mkfs.btrfs /dev/mapper/space -L NIXROOT  
 
 # 🔄 Create Swap on Btrfs size 4gb 
@@ -72,8 +77,21 @@ btrfs subvolume create /mnt/swap
 btrfs filesystem mkswapfile --size 4g --uuid clear /mnt/swap/swapfile  
 swapon /mnt/swap/swapfile  
 
-# 📦 Mount 
+# 📦 Mount Boot and Filesystem
 mount /dev/disk/by-label/NIXROOT /mnt  
 mkdir -p /mnt/boot  
 mount /dev/disk/by-label/NIXBOOT /mnt/boot  
 ```
+
+---
+
+## 4. ⚙️ Generate NixOS Config  
+
+```sh
+# 🏗️ Generate configuration files  
+sudo nixos-generate-config --root /mnt  
+
+# 📂 Navigate to config directory  
+cd /mnt/etc/nixos/  
+```
+
