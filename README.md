@@ -7,32 +7,33 @@
 if you don't have nmcli ❗
 
 ```sh
-# Check name wifi interface
-ip a 
+# 🔍 Check Wi-Fi interface name  
+ip a  
 
-# Scan wifi names and Copy your wifi name
-sudo iwlist wlp2s0 scan | grep ESSID
+# 📡 Scan available Wi-Fi networks and copy your network name  
+sudo iwlist wlp2s0 scan | grep ESSID  
 
-# Create file to connect your wifi
-nano /tmp/wpa_supplicant.conf
+# 📝 Create a file to store Wi-Fi credentials  
+nano /tmp/wpa_supplicant.conf  
 
-# Paste this in file /tmp/wpa_supplicant.conf and Save it
-network={
-    ssid="Wifi_name"
-    psk="Wifi_password"
-}
+# 📌 Paste this into the file `/tmp/wpa_supplicant.conf` and save it  
+network={  
+    ssid="Wifi_name"  
+    psk="Wifi_password"  
+}  
 
-# Replacing the template file with your configuration 
-sudo mv /tmp/wpa_supplicant.conf /etc/wpa_supplicant.conf
+# 🔄 Replace the template file with your configuration  
+sudo mv /tmp/wpa_supplicant.conf /etc/wpa_supplicant.conf  
 
-# Connect to wifi 
-sudo wpa_supplicant -B -i wlp2s0 -c /etc/wpa_supplicant.conf
+# 🔗 Connect to Wi-Fi  
+sudo wpa_supplicant -B -i wlp2s0 -c /etc/wpa_supplicant.conf  
 
-# Setup DHCP client  
-sudo dhclient wlp2s0
+# 🌍 Obtain an IP address using DHCP  
+sudo dhclient wlp2s0  
 
-# Test network 
-ping google.com
+# ✅ Test network connection  
+ping google.com  
+
 ```
 ---
 
@@ -96,7 +97,7 @@ sudo nixos-generate-config --root /mnt
 # 📂 Navigate to config directory  
 cd /mnt/etc/nixos/
 
-# Install wget and copy my configuration.nix and kernel 
+# 🪂 Install temporary wget and copy my configuration.nix and kernel 
 nix-shell -p wget
 wget https://raw.githubusercontent.com/nikil0dion/nix-config/refs/heads/main/nixos/configuration.nix
 wget https://raw.githubusercontent.com/nikil0dion/nix-config/refs/heads/main/nixos/linux-kernel.nix
