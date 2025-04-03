@@ -111,9 +111,11 @@ cd /mnt
 sudo nixos-install  
 ```
 
+---
+
 ## 6. 🔧 Configure after installation
 
-If you add a user via configuration.nix and then do a nixos-rebuild switch, you won't be able to log into the user because it doesn't have a password, so it's easier to create the user the old fashioned way 👴
+If you add a user via configuration.nix and then do a nixos-rebuild switch, you won't be able to log into the user because it doesn't have a password, so it's easier to create the user the old way 👴
 
 ```sh
 # 👤 Create a new user  
