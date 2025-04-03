@@ -1,5 +1,7 @@
 # NixOS Installation Guide with Btrfs and LUKS 24.11 😎
 
+**Installing a minimal working image of nixos**
+
 ## 1. 🌐 Up Network Wi-Fi 
 
 if you don't have nmcli ❗
@@ -85,13 +87,26 @@ mount /dev/disk/by-label/NIXBOOT /mnt/boot
 
 ---
 
-## 4. ⚙️ Generate NixOS Config  
+## 4. ⚙️ Generate NixOS Config and download my configurations
 
 ```sh
 # 🏗️ Generate configuration files  
 sudo nixos-generate-config --root /mnt  
 
 # 📂 Navigate to config directory  
-cd /mnt/etc/nixos/  
+cd /mnt/etc/nixos/
+
+# Install wget and copy my configuration.nix and kernel 
+nix-shell -p wget
+wget https://raw.githubusercontent.com/nikil0dion/nix-config/refs/heads/main/nixos/configuration.nix
+wget https://raw.githubusercontent.com/nikil0dion/nix-config/refs/heads/main/nixos/linux-kernel.nix
+```
+---
+
+## 5. 🏗️ Install NixOS
+
+```sh
+cd /mnt
+sudo nixos-install  
 ```
 
