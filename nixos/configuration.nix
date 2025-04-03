@@ -22,12 +22,12 @@
 
   # Virtualization Docker and Vmbox
   virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "nikilodion" ];
+  #users.extraGroups.vboxusers.members = [ "nikilodion" ];
   virtualisation.virtualbox.guest.enable = true;
   virtualisation.virtualbox.guest.dragAndDrop = true;
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "btrfs";
-  users.extraGroups.docker.members = [ "nikilodion" ];
+  #users.extraGroups.docker.members = [ "nikilodion" ];
   virtualisation.docker.rootless = {
   	enable = true;
   	setSocketVariable = true;
