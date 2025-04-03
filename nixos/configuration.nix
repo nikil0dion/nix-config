@@ -51,6 +51,7 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.gdm.wayland = true;
   services.xserver.desktopManager.gnome.enable = true;
+  programs.dconf.enable = true;
 
   # Fonts 
   fonts.packages = with pkgs; [
@@ -70,8 +71,6 @@
      pulse.enable = true;
    };
 
-  programs.firefox.enable = true;
-  programs.dconf.enable = true;
 
   # Minimal packages 
    environment.systemPackages = with pkgs; [
