@@ -130,10 +130,10 @@ echo "your_username ALL=(ALL) ALL" | sudo tee -a /etc/sudoers.d/your_username
 # ✏️ Uncomment line an change your new username
 nano /etc/nixos/configuration.nix
 
-# 📦 Change Add user in group vboxusers
+# 📦 Change Line Add user in group vboxusers
 users.extraGroups.vboxusers.members = [ "your_username" ];
 
-# 🐳 Change Add user in group docker
+# 🐳 Change Line Add user in group docker
 users.extraGroups.docker.members = [ "your_username" ];
 
 # 🚀 And rebuild
