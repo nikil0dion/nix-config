@@ -1,6 +1,7 @@
 # Simply NixOS Installation Guide with Btrfs and LUKS 24.11 😎
 
 **Installing a minimal working image of nixos**
+
 **🛑 No using Flakes**
 
 ## 1. 🌐 Up Network Wi-Fi 
