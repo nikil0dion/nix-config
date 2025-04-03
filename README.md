@@ -1,4 +1,4 @@
-# NixOS Installation Guide with Btrfs and LUKS 😎
+# NixOS Installation Guide with Btrfs and LUKS 24.11 😎
 
 ## 1. 🌐 Up Network Wi-Fi 
 
