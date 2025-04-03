@@ -52,7 +52,7 @@ default (fill up partition)
 w (write)
 ```
 
-## 🛠️ Create Filesystem and Label Partitions  
+## 3. 🛠️ Create Filesystem and Label Partitions  
 
 
 ```sh
