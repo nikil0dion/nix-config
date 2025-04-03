@@ -1,102 +1,33 @@
 # ~/.bashrc
+# don't put duplicate lines or lines starting with space in the history.
+HISTCONTROL=ignoreboth
 
-# Append "$1" to $PATH when not already in.
-append_path () {
-    case ":$PATH:" in
-        *:"$1":*)
-            ;;
-        *)
-            PATH="${PATH:+$PATH:}$1"
-    esac
-}
-append_path "$HOME/bin"
-append_path "$HOME/.local/bin"
-
-### EXPORT ### Should be before the change of the shell
-#export EDITOR=/usr/bin/nvim
-export VISUAL='nano'
-export HISTCONTROL=ignoreboth:erasedups:ignorespace
-HISTSIZE=1000000
-HISTFILESIZE=20000000
+# append to the history file, don't overwrite it
 shopt -s histappend
 
+export PATH=$PATH:$HOME/.local/go/go/bin
+export DOCKER_HOST=unix:///var/run/docker.sock
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
+# set history size
+HISTSIZE=1000
+HISTFILESIZE=2000
 
-# switch shell
-[[ $(ps --no-header --pid=$PPID --format=comm) != "${SHELL#/usr/bin/}" && -z ${BASH_EXECUTION_STRING} && ${SHELL} != "/usr/bin/bash" ]] && exec $SHELL
+# check the window size after each command
+shopt -s checkwinsize
 
-#Configure zoxide for bash
-eval "$(zoxide init bash)"
-
-if [[ $(tty) == */dev/tty* ]]; then
-  PS1="\e[1;32m[HQ:\e[1;31m$(ip -4 addr | grep -v '127.0.0.1' | grep -v 'secondary' | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | sed -z 's/\n/|/g;s/|\$/\n/' | rev | cut -c 2- | rev) | \u\e[1;32m]\n[>]\[\e[1;36m\]\$(pwd) $ \[\e[0m\]"
-else
-  PS1="\e[1;32m┌──[HQ🚀🌐\e[1;31m$(ip -4 addr | grep -v '127.0.0.1' | grep -v 'secondary' | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | sed -z 's/\n/|/g;s/|\$/\n/' | rev | cut -c 2- | rev)🔥\u\e[1;32m]\n└──╼[👾]\[\e[1;36m\]\$(pwd) $ \[\e[0m\]"
+# Load aliases if available
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
 fi
 
-# Use bash-completion, if available
-[[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
-    . /usr/share/bash-completion/bash_completion
+# Kubectl completition
+source <(kubectl completion bash)
+complete -o default -F __start_kubectl k
 
 # Bash aliases
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
 fi
-
-# Change up a variable number of directories
-# E.g:
-#   cu   -> cd ../
-#   cu 2 -> cd ../../
-#   cu 3 -> cd ../../../
-function cu {
-    local count=$1
-    if [ -z "${count}" ]; then
-        count=1
-    fi
-    local path=""
-    for i in $(seq 1 ${count}); do
-        path="${path}../"
-    done
-    cd $path
-}
-
-
-# Open all modified files in vim tabs
-function vimod {
-    vim -p $(git status -suall | awk '{print $2}')
-}
-
-# Open files modified in a git commit in vim tabs; defaults to HEAD. Pop it in your .bashrc
-# Examples:
-#     virev 49808d5
-#     virev HEAD~3
-function virev {
-    commit=$1
-    if [ -z "${commit}" ]; then
-      commit="HEAD"
-    fi
-    rootdir=$(git rev-parse --show-toplevel)
-    sourceFiles=$(git show --name-only --pretty="format:" ${commit} | grep -v '^$')
-    toOpen=""
-    for file in ${sourceFiles}; do
-      file="${rootdir}/${file}"
-      if [ -e "${file}" ]; then
-        toOpen="${toOpen} ${file}"
-      fi
-    done
-    if [ -z "${toOpen}" ]; then
-      echo "No files were modified in ${commit}"
-      return 1
-    fi
-    vim -p ${toOpen}
-}
-
-# 'Safe' version of __git_ps1 to avoid errors on systems that don't have it
-function gitPrompt {
-  command -v __git_ps1 > /dev/null && __git_ps1 " (%s)"
-}
 
 # Colours have names too. Stolen from Arch wiki
 txtblk='\[\e[0;30m\]' # Black - Regular
@@ -142,19 +73,6 @@ gitC="${txtpur}"
 pointerC="${txtgrn}"
 normalC="${txtwht}"
 
-# Red name for root
-if [ "${UID}" -eq "0" ]; then
-  nameC="${txtred}"
-fi
-
-#shopt
-shopt -s autocd # change to named directory
-shopt -s cdspell # autocorrects cd misspellings
-shopt -s cmdhist # save multi-line commands in history as single line
-shopt -s dotglob
-shopt -s histappend # do not overwrite history
-shopt -s expand_aliases # expand aliases
-
 # # ex = EXtractor for all kinds of archives
 # # usage: ex <file>
 ex ()
@@ -182,10 +100,8 @@ ex ()
   fi
 }
 
-export PROMPT_COMMAND='source ~/.bashrc no-repeat-flag'
 
 buffer_clean(){
   free -h && sudo sh -c 'echo 1 >  /proc/sys/vm/drop_caches' && free -h
 }
 
-[[ $1 != no-repeat-flag && -f /usr/share/blesh/ble.sh ]] && source /usr/share/blesh/ble.sh
