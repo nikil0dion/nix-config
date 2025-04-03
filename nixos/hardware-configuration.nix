@@ -1,38 +1,32 @@
-{ config, lib, pkgs, modulesPath, ... }: 
+{ config, lib, pkgs, modulesPath, ... }:
 
-{ 
-  import = [ ];
+{
+  imports = [ ];
 
-  # Clean tmp and create tmpfs  
-  boot.tmp.cleanOnBoot = true;
-  boot.tmp.tmpfsSize = "5GB";
-
-  # Kernel 
-  boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" "ehci_pci" "ahci" "sd_mod" "sr_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
-  
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
-  # Luks 
-  boot.initrd.luks.device."device".device = "/dev/disk/by-uuid/2dfssdew-dsfds-fdfd-fdsd-ddsfdsfdsfP";
-   
-  fileSystems."/" = 
-    { device = "/dev/disk/by-label/NIXROOT";
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/d803212c-104c-4157-bf10-6dbe315115b5";
       fsType = "btrfs";
     };
 
-  fileSystems."/boot" = 
-    { device = "/dev/disk/by-label/NIXBOOT";
-      fsType = "vfat"; 
+  # Your LUKS name
+  boot.initrd.luks.devices."space".device = "/dev/disk/by-uuid/c390e2e3-8687-428f-8443-18c43218273f";
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/8000-4FS2";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
     };
 
-   swapDevices = [
-    {
-      device = "/dev/disk/by-label/SWAP";
-    }
-  ];
+  swapDevices = [ 
+    { device = "/swap/swapfile";
+    }];
+
+  networking.useDHCP = lib.mkDefault true;
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
