@@ -149,7 +149,7 @@ You can go 2 ways
 
 1. Easy 😎
 - go to the site `search.nixos.org/packages`
-- find the desired application
+- find the desired package
 - and install it `nix-env -iA nixos.dnf`
 
 2. Hard 💪
