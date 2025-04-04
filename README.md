@@ -179,6 +179,6 @@ nano /etc/nixos/home.nix
 }
 
 # 🚀 Of course need rebuild OS after and everything will be installed
-nixos-rebuild switch
+nixos-rebuild switch --profile-name MyNixOS_v1.0
 ```
 
