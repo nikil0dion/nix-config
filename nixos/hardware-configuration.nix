@@ -7,6 +7,7 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
+  boot.blacklistedKernelModules = [ "kvm_intel" ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/d803212c-104c-4157-bf10-6dbe315115b5";
