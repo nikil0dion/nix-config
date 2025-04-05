@@ -7,6 +7,7 @@
       homeDirectory = "/home/nixos";
       stateVersion = "24.11";
       packages = with pkgs; [
+         gimp
          bluez
          cachix
          cursor
