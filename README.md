@@ -62,7 +62,7 @@ w (write)
 
 ## 3. 🛠️ Create Filesystem and Label Partitions  
 
-all actions should be done in root ❗
+all actions in root ❗
 
 `su root` ✈️
 
@@ -118,7 +118,7 @@ sudo nixos-install
 
 ## 6. 🤠 Create user after installation
 
-If you add a user via configuration.nix and then do a nixos-rebuild switch, you won't be able to log into the user because it doesn't have a password, so it's easier to create the user the old way 👴
+If you add a user via configuration.nix and then do a nixos-rebuild switch, you won't be able to login the user because it doesn't have a password, so it's easier to create the user the old way 👴
 
 ```sh
 # 👤 Create a new user  
