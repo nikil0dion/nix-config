@@ -8,12 +8,12 @@
       stateVersion = "25.05";
       packages = with pkgs; [
          alsa-utils
-	       audacity
-	       appimage-run
+	 audacity
+	 appimage-run
          bluez
          bottles-unwrapped
          cachix
-	       clickhouse
+	 clickhouse
          cursor
          dconf
          dive
@@ -59,7 +59,7 @@
          vlc
          vulkan-tools
          warp-terminal
-	       wget
+	 wget
          zip
       ];
   };
