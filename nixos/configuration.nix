@@ -33,25 +33,22 @@
   	setSocketVariable = true;
   };
 
-  # Gaaame
-  programs.steam = {
-  	enable = true;
-  	remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-  	dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-  	localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
-  };
-
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   # Enable the X11 and wayland windowing system.
   services.xserver.enable = true;
 
+  # Another services
+  services.avahi.enable = false;
+
   # Enable Gnome
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.gdm.wayland = true;
   services.xserver.desktopManager.gnome.enable = true;
   programs.dconf.enable = true;
+  services.gnome.localsearch.enable = false;
+  services.gnome.tinysparql.enable = false; 
 
   # Fonts 
   fonts.packages = with pkgs; [
@@ -71,12 +68,15 @@
      pulse.enable = true;
    };
 
+   # Enable bluthooth 
+  hardware.bluetooth.enable = true; 
+  hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.package = pkgs.bluez ;  
 
   # Minimal packages 
    environment.systemPackages = with pkgs; [
      wget
      git
-     curl
      htop
   ];
 
@@ -85,6 +85,6 @@
   security.polkit.enable = true;
 
   # Version
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.05";
 
 }
