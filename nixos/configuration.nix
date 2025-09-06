@@ -8,83 +8,112 @@
     ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  
-  # Hostname
-  networking.hostName = "nixos"; # Define your hostname.
-
-  # Network
-  networking.networkmanager.enable = true;  
-
-  # Set your time zone.
+  boot = {
+	loader = {
+		systemd-boot.enable = true;
+  		efi.canTouchEfiVariables = true;
+  		};
+	};
+  # Set your time zone and language 
   time.timeZone = "Europe/Moscow";
+  i18n.defaultLocale = "en_US.UTF-8";
+  console.keyMap = "us";
 
-  # Virtualization Docker and Vmbox
-  virtualisation.virtualbox.host.enable = true;
-  #users.extraGroups.vboxusers.members = [ "user_name" ];
-  virtualisation.virtualbox.guest.enable = true;
-  virtualisation.virtualbox.guest.dragAndDrop = true;
-  virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "btrfs";
-  #users.extraGroups.docker.members = [ "user_name" ];
-  virtualisation.docker.rootless = {
-  	enable = true;
-  	setSocketVariable = true;
+  ## Networking   
+  networking = {
+	hostName = "hostname";
+	firewall.enable = false;
+  	networkmanager.enable = true;
+	networkmanager.plugins = [ ];
+        #useNetworkd = true;
+  	#useDHCP = false;
+ 	#interfaces.wlp2s0.useDHCP = true;  # if your use Wi-Fi
+  	#interfaces.eth0.useDHCP = true;   # if your use Ethernet
+   }; 
+ 
+  ## Containerization and virtualization
+  users = { 
+	extraGroups = {
+		vboxusers.members = [ "username" ];
+		docker.members = [ "username" ];
+		};
+  };
+  virtualisation = {
+	virtualbox = {
+		host.enable = true;
+  		guest.enable = false;
+  		guest.dragAndDrop = false;
+ 		};
+	docker = {
+		enable = true;
+ 		storageDriver = "btrfs";
+ 		};
   };
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
+  # Enable services in system.
+  services = { 
+	xserver = {
+        	enable = true;
+		displayManager.gdm.wayland = true;
+                displayManager.gdm.enable = true;
+                desktopManager.gnome.enable = true;
+ 		xkb.layout = "us";
+		};
+	gnome = {
+		localsearch.enable = false;
+		tinysparql.enable = false;
+		core-apps.enable = false;
+		core-developer-tools.enable = false;
+		games.enable = false;
+   		sushi.enable = true;
+		};
+        avahi = { 
+		enable = false;
+ 		};
+	pipewire = {
+		enable = true;
+     		alsa.enable = true;
+     		jack.enable = true;
+     		pulse.enable = true;
+		};
+	httpd = {
+		enable = false;  
+	};	
+  };	
 
-  # Enable the X11 and wayland windowing system.
-  services.xserver.enable = true;
-
-  # Another services
-  services.avahi.enable = false;
-
-  # Enable Gnome
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.gdm.wayland = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  programs.dconf.enable = true;
-  services.gnome.localsearch.enable = false;
-  services.gnome.tinysparql.enable = false; 
-
-  # Fonts 
+  # Fonts   
   fonts.packages = with pkgs; [
-    jetbrains-mono
-    nerd-font-patcher
-    noto-fonts-color-emoji
+ 	   jetbrains-mono
+    	   nerd-font-patcher
   ];
-
-  # Configure keymap in X11
-  services.xserver.xkb.layout = "us";
-
-  # Enable sound jack 
-   services.pipewire = {
-     enable = true;
-     alsa.enable = true;
-     jack.enable = true;
-     pulse.enable = true;
-   };
 
    # Enable bluthooth 
-  hardware.bluetooth.enable = true; 
-  hardware.bluetooth.powerOnBoot = true;
-  hardware.bluetooth.package = pkgs.bluez ;  
+  hardware = {
+	bluetooth = {
+		enable = true; 
+  		powerOnBoot = true;
+  		package = pkgs.bluez; 
+		};
+  };  
 
-  # Minimal packages 
+  # Default programs 
+  programs = {
+	firefox.enable = true;
+  	dconf.enable = true;
+  };
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
    environment.systemPackages = with pkgs; [
-     wget
      git
-     htop
   ];
 
-  # Security mod
-  security.rtkit.enable = true;
-  security.polkit.enable = true;
+  security = {
+	rtkit.enable = true;
+  	polkit.enable = true;
+	
+  };
 
-  # Version
   system.stateVersion = "25.05";
 
 }
