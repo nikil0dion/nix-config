@@ -77,7 +77,10 @@
      		pulse.enable = true;
 		};
 	httpd = {
-		enable = false;  
+		enable = false;
+		};
+	thermald = {
+		enable = true;	
 	};	
   };	
 
