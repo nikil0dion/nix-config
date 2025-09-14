@@ -53,7 +53,7 @@
   # Enable services in system.
   services = { 
 	xserver = {
-        	enable = true;
+        enable = true;
 		displayManager.gdm.wayland = true;
         displayManager.gdm.enable = true;
         desktopManager.gnome.enable = true;
