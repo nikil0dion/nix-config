@@ -57,10 +57,10 @@
   # Enable services in system.
   services = { 
 	xserver = {
-        	enable = true;
+        enable = true;
 		displayManager.gdm.wayland = true;
-                displayManager.gdm.enable = true;
-                desktopManager.gnome.enable = true;
+        displayManager.gdm.enable = true;
+        desktopManager.gnome.enable = true;
  		xkb.layout = "us";
 		};
 	gnome = {
@@ -91,10 +91,12 @@
 		};
 	undervolt = {
 		enable = true;
- 		coreOffset = -10;
- 		gpuOffset = -10;
- 		temp = 70;
-	    turbo = 1; 
+ 		coreOffset = -20;
+ 		gpuOffset = -20;
+        analogioOffset = -20;
+        uncoreOffset = -20;
+ 		temp = 80;
+	    turbo = 0; # enable 
 		};
   };	
 
