@@ -89,16 +89,14 @@
 	irqbalance = { 
 		enable = true; 
 		};
+	undervolt = {
+		enable = true;
+ 		coreOffset = -10;
+ 		gpuOffset = -10;
+ 		temp = 70;
+	    turbo = 1; 
+		};
   };	
-
-#services.undervolt = {
-#  enable = true;
- # coreOffset = -80;  # Начальное значение, можно увеличить
- # cacheOffset = -80;
- # gpuOffset = -50;
- # temperature = 80;  # Снижена для лучшего охлаждения
- # turbo = 1;  # Включить turbo boost
-#};
 
   # Fonts   
   fonts.packages = with pkgs; [
@@ -129,6 +127,7 @@
      stress
      lm_sensors
      undervolt
+	 vulkan-headers
   ];
   
   security = {
