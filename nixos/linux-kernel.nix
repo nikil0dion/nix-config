@@ -9,27 +9,13 @@
     "fbcon=nodefer"
     "vt.global_cursor_default=0"
     "kernel.modules_disabled=1"
-    "lsm=landlock,lockdown,yama,integrity,apparmor,bpf,tomoyo,selinux"
+    "lsm=landlock,lockdown,yama,integrity,apparmor,bpf,tomoyo"
     "usbcore.autosuspend=-1"
     "video4linux"
     "acpi_rev_override=5"
-    "security=selinux"
+    "kernel.kexec_load_disabled=1"
   ];
-  # boot.kernelPatches = [ {
-  #      name = "selinux-config";
-  #      patch = null;
-  #      extraConfig = '' 
-  #              SECURITY_SELINUX y
-  #              SECURITY_SELINUX_BOOTPARAM n
-  #              SECURITY_SELINUX_DEVELOP y
-  #              SECURITY_SELINUX_AVC_STATS y
-  #              DEFAULT_SECURITY_SELINUX n
-  #            '';
-  # } ];
 
-  systemd.package = pkgs.systemd.override { withSelinux = true; };
-
-  environment.systemPackages = with pkgs; [
-    policycoreutils
-  ];
+  # Используем стандартный systemd без SELinux
+  systemd.package = pkgs.systemd;
 }
