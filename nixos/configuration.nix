@@ -1,3 +1,7 @@
+# Edit this configuration file to define what should be installed on
+# your system. Help is available in the configuration.nix(5) man page, on
+# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
+
 { config, lib, pkgs, ... }:
 
 {
@@ -21,7 +25,7 @@
 
   ## Networking   
   networking = {
-	hostName = "hostname";
+	hostName = "www";
 	firewall.enable = false;
   	networkmanager.enable = true;
 	networkmanager.plugins = [ ];
@@ -34,8 +38,8 @@
   ## Containerization and virtualization
   users = { 
 	extraGroups = {
-		vboxusers.members = [ "username" ];
-		docker.members = [ "username" ];
+		vboxusers.members = [ "nikilodion" ];
+		docker.members = [ "nikilodion" ];
 		};
   };
   virtualisation = {
@@ -53,10 +57,10 @@
   # Enable services in system.
   services = { 
 	xserver = {
-        enable = true;
+        	enable = true;
 		displayManager.gdm.wayland = true;
-        displayManager.gdm.enable = true;
-        desktopManager.gnome.enable = true;
+                displayManager.gdm.enable = true;
+                desktopManager.gnome.enable = true;
  		xkb.layout = "us";
 		};
 	gnome = {
@@ -80,9 +84,21 @@
 		enable = false;
 		};
 	thermald = {
-		enable = true;	
-	};	
+		enable = true;  
+		};
+	irqbalance = { 
+		enable = true; 
+		};
   };	
+
+#services.undervolt = {
+#  enable = true;
+ # coreOffset = -80;  # Начальное значение, можно увеличить
+ # cacheOffset = -80;
+ # gpuOffset = -50;
+ # temperature = 80;  # Снижена для лучшего охлаждения
+ # turbo = 1;  # Включить turbo boost
+#};
 
   # Fonts   
   fonts.packages = with pkgs; [
@@ -108,12 +124,23 @@
   # $ nix search wget
    environment.systemPackages = with pkgs; [
      git
+     nekoray
+     lact
+     stress
+     lm_sensors
+     undervolt
   ];
-
+  
   security = {
 	rtkit.enable = true;
   	polkit.enable = true;
-  };
+	};
 
   system.stateVersion = "25.05";
+
+  systemd.services = {
+    NetworkManager-wait-online.enable = false;
+    systemd-networkd-wait-online.enable = false;
+  };
+
 }
