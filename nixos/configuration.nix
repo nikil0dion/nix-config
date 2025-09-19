@@ -26,9 +26,11 @@
   ## Networking   
   networking = {
 	hostName = "www";                    # system hostname
-	firewall.enable = false;             # disabled firewall (security risk!)
-  	networkmanager.enable = true;        # network connection manager
-	networkmanager.plugins = [ ];
+	firewall.enable = false;             # disabled firewall (security risk! но нужно для docker)
+  	networkmanager = {
+  		enable = true;                   # network connection manager
+		plugins = [ ];                   # disable all VPN plugins 
+	};
         #useNetworkd = true;
   	#useDHCP = false;
  	#interfaces.wlp2s0.useDHCP = true;  # if your use Wi-Fi
@@ -42,6 +44,7 @@
 		docker.members = [ "nikilodion" ];    # docker access
 		};
   };
+  
   virtualisation = {
 	virtualbox = {                       # oracle virtualbox
 		host.enable = true;
@@ -51,6 +54,25 @@
 	docker = {                           # container platform
 		enable = true;
  		storageDriver = "btrfs";         # use btrfs for containers
+		daemon.settings = {
+			# Network and security
+			"ipv6" = false;              # disable IPv6
+			"ip-forward" = false;        # don't forward IP packets
+			"iptables" = true;           # use iptables rules
+			"ip-masq" = false;           # disable IP masquerading
+			
+			# Security
+			"live-restore" = true;       # keep containers running during restart
+			"userland-proxy" = false;    # disable userland proxy for security
+			"no-new-privileges" = true;  # prevent privilege escalation
+			"icc" = false;               # disable inter-container communication
+			
+			# Performance
+			"max-concurrent-downloads" = 3;  # limit concurrent downloads
+			"max-concurrent-uploads" = 3;    # limit concurrent uploads
+			"max-download-attempts" = 3;     # download retry attempts
+			"shutdown-timeout" = 15;         # container shutdown timeout
+			};
  		};
   };
 
@@ -96,7 +118,7 @@
         uncoreOffset = -20;
  		analogioOffset = -20;
 		temp = 80;
-	        turbo = 0;
+	       turbo = 0;
 		};
 	fstrim = {                # ssd trim optimization
 		enable = true;
@@ -108,7 +130,8 @@
 			fileSystems = [ "/" ];
 			};
 		};
-    };	
+	};
+  
 
   # Fonts   
   fonts.packages = with pkgs; [
@@ -135,8 +158,6 @@
    environment.systemPackages = with pkgs; [
      git                # version control system
      nekoray            # v2ray/xray gui client  
-     lact               # gpu control and monitoring
-     stress             # system stress testing
      lm_sensors         # hardware monitoring (temp, fans)
      undervolt          # cpu undervolting tool
      vulkan-headers     # vulkan api headers
@@ -168,12 +189,21 @@
     };
   };
 
-  # Disabling inactive 
+  # Disabling inactive services 
   systemd.services = {
     NetworkManager-wait-online.enable = false;  # skip network wait
     systemd-networkd-wait-online.enable = false; # skip networkd wait
+    NetworkManager-dispatcher.enable = false;  # disable script dispatcher  
   };
-  
+	
+ # Hardening for unsafe services
+ systemd.services.thermald.serviceConfig = {
+	ProtectHome = true;              # no access to /home
+	ProtectSystem = "strict";        # read-only filesystem
+	PrivateTmp = true;               # isolated /tmp
+	NoNewPrivileges = true;          # no privilege escalation
+	};  
+	
   # System logs cleanup
   services.journald.extraConfig = ''
     SystemMaxUse=100M                    # limit journal size to 100MB
@@ -181,16 +211,4 @@
     MaxRetentionSec=1month               # keep logs for 1 month
   '';
   
-  # Gpu control 
-  systemd.services.lact = {    # gpu monitoring daemon
-    description = "GPU Control Daemon";
-    after = ["multi-user.target"];
-    wantedBy = ["multi-user.target"];
-    serviceConfig = {
-      ExecStart = "${pkgs.lact}/bin/lact daemon";
-    };
-    enable = true;
-  };
-
-
 }
