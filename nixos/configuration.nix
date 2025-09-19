@@ -14,20 +14,20 @@
   # Use the systemd-boot EFI boot loader.
   boot = {
 	loader = {
-		systemd-boot.enable = true;
-  		efi.canTouchEfiVariables = true;
+		systemd-boot.enable = true;     # modern efi bootloader
+  		efi.canTouchEfiVariables = true; # allow efi modifications
   		};
 	};
   # Set your time zone and language 
-  time.timeZone = "Europe/Moscow";
-  i18n.defaultLocale = "en_US.UTF-8";
-  console.keyMap = "us";
+  time.timeZone = "Europe/Moscow";          # timezone setting
+  i18n.defaultLocale = "en_US.UTF-8";      # system language
+  console.keyMap = "us";                   # console keyboard layout
 
   ## Networking   
   networking = {
-	hostName = "www";
-	firewall.enable = false;
-  	networkmanager.enable = true;
+	hostName = "www";                    # system hostname
+	firewall.enable = false;             # disabled firewall (security risk!)
+  	networkmanager.enable = true;        # network connection manager
 	networkmanager.plugins = [ ];
         #useNetworkd = true;
   	#useDHCP = false;
@@ -38,76 +38,86 @@
   ## Containerization and virtualization
   users = { 
 	extraGroups = {
-		vboxusers.members = [ "nikilodion" ];
-		docker.members = [ "nikilodion" ];
+		vboxusers.members = [ "nikilodion" ]; # virtualbox access
+		docker.members = [ "nikilodion" ];    # docker access
 		};
   };
   virtualisation = {
-	virtualbox = {
+	virtualbox = {                       # oracle virtualbox
 		host.enable = true;
   		guest.enable = false;
   		guest.dragAndDrop = false;
  		};
-	docker = {
+	docker = {                           # container platform
 		enable = true;
- 		storageDriver = "btrfs";
+ 		storageDriver = "btrfs";         # use btrfs for containers
  		};
   };
 
   # Enable services in system.
   services = { 
-	xserver = {
+	xserver = {                          # x11 display server
         enable = true;
-		displayManager.gdm.wayland = true;
-        displayManager.gdm.enable = true;
-        desktopManager.gnome.enable = true;
- 		xkb.layout = "us";
+		displayManager.gdm.wayland = true;   # use wayland in gdm
+        displayManager.gdm.enable = true;   # gnome display manager
+        desktopManager.gnome.enable = true; # gnome desktop
+ 		xkb.layout = "us";               # keyboard layout
 		};
-	gnome = {
-		localsearch.enable = false;
-		tinysparql.enable = false;
-		core-apps.enable = false;
-		core-developer-tools.enable = false;
-		games.enable = false;
-   		sushi.enable = true;
+	gnome = {                            # gnome desktop settings
+		localsearch.enable = false;      # file indexing
+		tinysparql.enable = false;       # metadata tracker
+		core-apps.enable = false;        # default apps
+		core-developer-tools.enable = false; # dev tools
+		games.enable = false;            # gnome games
+   		sushi.enable = true;             # file previewer
 		};
-        avahi = { 
-		enable = false;
+        avahi = {                            # network service discovery
+		enable = false;                  
  		};
-	pipewire = {
+	pipewire = {              # modern audio server
 		enable = true;
      		alsa.enable = true;
      		jack.enable = true;
      		pulse.enable = true;
 		};
-	httpd = {
+	httpd = {                 # apache web server
 		enable = false;
 		};
-	thermald = {
+	thermald = {              # thermal management daemon
 		enable = true;  
 		};
-	irqbalance = { 
+	irqbalance = {            # interrupt balancing
 		enable = true; 
 		};
-	undervolt = {
+	undervolt = {             # cpu undervolting service
 		enable = true;
  		coreOffset = -20;
  		gpuOffset = -20;
-        analogioOffset = -20;
         uncoreOffset = -20;
- 		temp = 80;
-	    turbo = 0; # enable 
+ 		analogioOffset = -20;
+		temp = 80;
+	        turbo = 0;
 		};
-  };	
+	fstrim = {                # ssd trim optimization
+		enable = true;
+		};
+	btrfs = {                 # btrfs filesystem tools
+		autoScrub = {
+			enable = true;
+			interval = "monthly";
+			fileSystems = [ "/" ];
+			};
+		};
+    };	
 
   # Fonts   
   fonts.packages = with pkgs; [
- 	   jetbrains-mono
+ 	   jetbrains-mono          # programming font
   ];
 
    # Enable bluthooth 
   hardware = {
-	bluetooth = {
+	bluetooth = {              # bluetooth support
 		enable = true; 
   		powerOnBoot = true;
   		package = pkgs.bluez; 
@@ -116,32 +126,71 @@
 
   # Default programs 
   programs = {
-	firefox.enable = true;
-  	dconf.enable = true;
+	firefox.enable = true;     # web browser
+  	dconf.enable = true;       # gnome configuration
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
    environment.systemPackages = with pkgs; [
-     git
-     nekoray
-     lact
-     stress
-     lm_sensors
-     undervolt
-	 vulkan-headers
+     git                # version control system
+     nekoray            # v2ray/xray gui client  
+     lact               # gpu control and monitoring
+     stress             # system stress testing
+     lm_sensors         # hardware monitoring (temp, fans)
+     undervolt          # cpu undervolting tool
+     vulkan-headers     # vulkan api headers
+     hwdata             # hardware identification database
   ];
-  
+
+  # Secirity tools  
   security = {
-	rtkit.enable = true;
-  	polkit.enable = true;
+	rtkit.enable = true;       # realtime kit
+  	polkit.enable = true;      # privilege escalation
 	};
 
   system.stateVersion = "25.05";
 
-  systemd.services = {
-    NetworkManager-wait-online.enable = false;
-    systemd-networkd-wait-online.enable = false;
+  # Nix garbage collection and optimization
+  nix = {
+    settings = {
+      auto-optimise-store = true;        # automatic store optimization
+      experimental-features = [ "nix-command" ]; # modern nix cli
+    };
+    gc = {                               # garbage collection
+      automatic = true;                  # enable automatic cleanup
+      dates = "weekly";                  # run weekly
+      options = "--delete-older-than 30d"; # keep last 30 days
+    };
+    optimise = {                         # store optimization
+      automatic = true;                  # enable automatic optimization
+      dates = [ "weekly" ];              # run weekly
+    };
   };
+
+  # Disabling inactive 
+  systemd.services = {
+    NetworkManager-wait-online.enable = false;  # skip network wait
+    systemd-networkd-wait-online.enable = false; # skip networkd wait
+  };
+  
+  # System logs cleanup
+  services.journald.extraConfig = ''
+    SystemMaxUse=100M                    # limit journal size to 100MB
+    SystemMaxFileSize=50M                # max file size 50MB
+    MaxRetentionSec=1month               # keep logs for 1 month
+  '';
+  
+  # Gpu control 
+  systemd.services.lact = {    # gpu monitoring daemon
+    description = "GPU Control Daemon";
+    after = ["multi-user.target"];
+    wantedBy = ["multi-user.target"];
+    serviceConfig = {
+      ExecStart = "${pkgs.lact}/bin/lact daemon";
+    };
+    enable = true;
+  };
+
 
 }
