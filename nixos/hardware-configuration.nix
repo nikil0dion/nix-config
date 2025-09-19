@@ -18,6 +18,10 @@
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/d803212c-104c-4157-bf10-6dbe315115b5";
       fsType = "btrfs";
+      options = [ 
+        "noatime"           # safer than noatime: update atime only when needed
+        "space_cache=v2"     # safe: improved space cache performance
+      ];
     };
 
   # Your LUKS name
