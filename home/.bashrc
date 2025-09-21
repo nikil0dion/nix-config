@@ -1,12 +1,22 @@
 # ~/.bashrc
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
 
-export PATH=$PATH:$HOME/.local/go/go/bin
+export ANDROID_HOME=$HOME/Android/Sdk
+export SDKMANAGER_HOME=$HOME/Android/Sdk
+export PATH=$PATH:/usr/local/bin:$HOME/.config/FlutterSDK/flutter/bin:$HOME/.local/go/bin:$HOME/yandex-cloud/bin
 export DOCKER_HOST=unix:///var/run/docker.sock
+
 
 # set history size
 HISTSIZE=1000
@@ -20,58 +30,88 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# Kubectl completition
 source <(kubectl completion bash)
 complete -o default -F __start_kubectl k
 
-# Bash aliases
-if [ -f ~/.bash_aliases ]; then
-  . ~/.bash_aliases
-fi
+# files 
+alias ls='lsd --color=auto'
+alias la='lsd -a'
+alias lx='lsd -lXh' # sort by extension
+alias lk='lsd -lSrh' # sort by size
+alias lr='lsd -lRh' # recursive ls
+alias lt='lsd -ltrh' # sort by date
+alias lm='lsd -alh | more' # pipe through 'more'
+alias ll='lsd -alFh' # long listing format
+alias lf="lsd -l | grep -E -v '^d'" # files only
+alias ldir="lsd -l | grep -E '^d' --color=never" # directories only
+alias l='lsd'
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias nano='nano -l'
+alias ..="cd ../"
+alias ...="cd ../../"
+alias ....="cd ../../../"
 
-# Colours have names too. Stolen from Arch wiki
-txtblk='\[\e[0;30m\]' # Black - Regular
-txtred='\[\e[0;31m\]' # Red
-txtgrn='\[\e[0;32m\]' # Green
-txtylw='\[\e[0;33m\]' # Yellow
-txtblu='\[\e[0;34m\]' # Blue
-txtpur='\[\e[0;35m\]' # Purple
-txtcyn='\[\e[0;36m\]' # Cyan
-txtwht='\[\e[0;37m\]' # White
-bldblk='\[\e[1;30m\]' # Black - Bold
-bldred='\[\e[1;31m\]' # Red
-bldgrn='\[\e[1;32m\]' # Green
-bldylw='\[\e[1;33m\]' # Yellow
-bldblu='\[\e[1;34m\]' # Blue
-bldpur='\[\e[1;35m\]' # Purple
-bldcyn='\[\e[1;36m\]' # Cyan
-bldwht='\[\e[1;37m\]' # White
-unkblk='\[\e[4;30m\]' # Black - Underline
-undred='\[\e[4;31m\]' # Red
-undgrn='\[\e[4;32m\]' # Green
-undylw='\[\e[4;33m\]' # Yellow
-undblu='\[\e[4;34m\]' # Blue
-undpur='\[\e[4;35m\]' # Purple
-undcyn='\[\e[4;36m\]' # Cyan
-undwht='\[\e[4;37m\]' # White
-bakblk='\[\e[40m\]'   # Black - Background
-bakred='\[\e[41m\]'   # Red
-badgrn='\[\e[42m\]'   # Green
-bakylw='\[\e[43m\]'   # Yellow
-bakblu='\[\e[44m\]'   # Blue
-bakpur='\[\e[45m\]'   # Purple
-bakcyn='\[\e[46m\]'   # Cyan
-bakwht='\[\e[47m\]'   # White
-txtrst='\[\e[0m\]'    # Text Reset
+# storages 
+alias df='df -hT'
+alias dush='du -smh * | sort -rh'
+alias iosx='iostat -xtc --human 1'
 
-# Prompt colours
-atC="${txtpur}"
-nameC="${txtpur}"
-hostC="${txtpur}"
-pathC="${txtgrn}"
-gitC="${txtpur}"
-pointerC="${txtgrn}"
-normalC="${txtwht}"
+# network
+alias sst='ss -tulpn'
+
+# go
+alias g='go'
+alias gr='go run'
+alias gb='go build'
+alias gt='go test'
+alias gmi='go mod init'
+alias gmt='go mod tidy'
+alias gmd='go mod download'
+
+# git
+alias gs='git status'
+alias gadd='git add .'
+alias gpll='git pull'
+alias gpsh='git push'
+alias gcom='git commit -am'
+alias gche='git checkout'
+alias gcheb='git checkout -b'
+
+
+# kubernetes
+alias k='kubectl'
+alias ksys='kubectl -n kube-system get all'
+alias kg='kubectl get'
+alias kgp='kubectl get pod'
+alias kgd='kubectl get deployment'
+alias kd='kubectl delete'
+alias kgs='kubectl get service'
+
+# docker compose 
+alias dc='docker compose'
+alias dcls='docker compose ls'
+alias dcps='docker compose ps'
+alias dcupd='docker compose up -d'
+
+# docker
+alias d='docker'
+alias dl='docker logs'
+alias dlf='docker logs -f'
+alias de='docker exec'
+alias deit='docker exec -it'
+alias ds='docker stop'
+alias drm='docker rm'
+alias dps='docker ps -a --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}" | sed -E "s/(Up[^ ]*)/\x1b[32m\1\x1b[0m/; s/(Exited[^ ]*|Down|Dead)/\x1b[31m\1\x1b[0m/; s/(Restarting[^ ]*)/\x1b[33m\1\x1b[0m/"'
+
+# system 
+alias s='systemctl'
+alias sys='sysctl'
+alias e='exit'
+alias j='journalctl'
+alias jf='journalctl -f'
+
 
 # # ex = EXtractor for all kinds of archives
 # # usage: ex <file>
@@ -100,8 +140,13 @@ ex ()
   fi
 }
 
-
 buffer_clean(){
   free -h && sudo sh -c 'echo 1 >  /proc/sys/vm/drop_caches' && free -h
 }
 
+
+# The next line updates PATH for CLI.
+if [ -f '/$HOME/yandex-cloud/path.bash.inc' ]; then source '/$HOME/yandex-cloud/path.bash.inc'; fi
+
+# The next line enables shell command completion for yc.
+if [ -f '/$HOME/yandex-cloud/completion.bash.inc' ]; then source '/$HOME/yandex-cloud/completion.bash.inc'; fi
