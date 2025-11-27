@@ -44,6 +44,8 @@ ping google.com
 as in the official instructions on nix.wiki ❗
 
 ```sh
+sudo gdisk /dev/sdX
+
 g (gpt disk label)
 n
 1 (partition number [1/128])
@@ -78,15 +80,16 @@ cryptsetup luksOpen /dev/sdX2 space
 cryptsetup -v status space # Check it's ok
 mkfs.btrfs /dev/mapper/space -L NIXROOT  
 
+# 📦 Mount Boot and Filesystem
+mount /dev/disk/by-label/NIXROOT /mnt  
+mkdir -p /mnt/boot  
+mount /dev/disk/by-label/NIXBOOT /mnt/boot  
+
 # 🔄 Create Swap on Btrfs size 4gb 
 btrfs subvolume create /mnt/swap  
 btrfs filesystem mkswapfile --size 4g --uuid clear /mnt/swap/swapfile  
 swapon /mnt/swap/swapfile  
 
-# 📦 Mount Boot and Filesystem
-mount /dev/disk/by-label/NIXROOT /mnt  
-mkdir -p /mnt/boot  
-mount /dev/disk/by-label/NIXBOOT /mnt/boot  
 ```
 
 ---
