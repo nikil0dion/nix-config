@@ -19,7 +19,7 @@
   		};
 	};
   # Set your time zone and language 
-  time.timeZone = "Europe/Moscow";          # timezone setting
+  time.timeZone = "Europe/Madrid";          # timezone setting
   i18n.defaultLocale = "en_US.UTF-8";      # system language
   console.keyMap = "us";                   # console keyboard layout
 
@@ -29,7 +29,10 @@
 	firewall.enable = false;             # disabled firewall (security risk! но нужно для docker)
   	networkmanager = {
   		enable = true;                   # network connection manager
-		plugins = [ ];                   # disable all VPN plugins 
+		plugins = with pkgs; [
+  			  networkmanager-l2tp        # L2TP/IPsec
+			  networkmanager-openvpn     # OpenVPN
+			];
 	};
         #useNetworkd = true;
   	#useDHCP = false;
@@ -40,17 +43,12 @@
   ## Containerization and virtualization
   users = { 
 	extraGroups = {
-		vboxusers.members = [ "nikilodion" ]; # virtualbox access
 		docker.members = [ "nikilodion" ];    # docker access
+		plugdev.members = [ "nikilodion" ];   # usb devices access (ledger, etc)
 		};
   };
   
   virtualisation = {
-	virtualbox = {                       # oracle virtualbox
-		host.enable = true;
-  		guest.enable = false;
-  		guest.dragAndDrop = false;
- 		};
 	docker = {                           # container platform
 		enable = true;
  		storageDriver = "btrfs";         # use btrfs for containers
@@ -73,18 +71,17 @@
 			"max-download-attempts" = 3;     # download retry attempts
 			"shutdown-timeout" = 15;         # container shutdown timeout
 			};
- 		};
+		};
   };
 
   # Enable services in system.
   services = { 
-	xserver = {                          # x11 display server
-        enable = true;
-		displayManager.gdm.wayland = true;   # use wayland in gdm
-        displayManager.gdm.enable = true;   # gnome display manager
-        desktopManager.gnome.enable = true; # gnome desktop
- 		xkb.layout = "us";               # keyboard layout
+	displayManager = { 
+		gdm.wayland = true;   # use wayland in gdm
+        	gdm.enable = true;   # gnome display manager
 		};
+        desktopManager.gnome.enable = true; # gnome desktop
+
 	gnome = {                            # gnome desktop settings
 		localsearch.enable = false;      # file indexing
 		tinysparql.enable = false;       # metadata tracker
@@ -130,12 +127,16 @@
 			fileSystems = [ "/" ];
 			};
 		};
+	xl2tpd = { 
+		enable = true;   # ipsec daemon
+		};
 	};
   
 
   # Fonts   
   fonts.packages = with pkgs; [
  	   jetbrains-mono          # programming font
+	   noto-fonts-color-emoji	
   ];
 
    # Enable bluthooth 
@@ -145,6 +146,7 @@
   		powerOnBoot = true;
   		package = pkgs.bluez; 
 		};
+	ledger.enable = true;      # ledger hardware wallet support
   };  
 
   # Default programs 
@@ -155,14 +157,54 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-   environment.systemPackages = with pkgs; [
-     git                # version control system
-     nekoray            # v2ray/xray gui client  
-     lm_sensors         # hardware monitoring (temp, fans)
-     undervolt          # cpu undervolting tool
-     vulkan-headers     # vulkan api headers
-     hwdata             # hardware identification database
-  ];
+environment.systemPackages = with pkgs; [
+ 	 # Development & Version Control
+ 	 git                      # version control system
+  
+ 	 # System Utilities
+ 	 e2fsprogs                # ext2/3/4 filesystem utilities
+ 	 fd                       # fast alternative to find
+ 	 lsof                     # list open files
+ 	 pciutils                 # PCI utilities (lspci)
+ 	 traceroute               # network diagnostic tool
+ 	 util-linux               # essential system utilities
+  
+ 	 # Monitoring & Hardware
+ 	 lm_sensors               # hardware monitoring (temp, fans)
+  	 gnome-system-monitor     # system resource monitor
+ 	 undervolt                # CPU undervolting tool
+  
+ 	 # Networking & VPN
+ 	 iptables                 # firewall utilities
+ 	 openvpn                  # OpenVPN client
+ 	 strongswan               # IPsec VPN
+ 	 xl2tpd                   # L2TP daemon
+  
+ 	 # Proxy & Tunneling
+ 	 nekoray                  # v2ray/xray GUI client
+ 	 sing-box                 # universal proxy platform
+ 	 snx-rs                   # CheckPoint SNX VPN client
+ 	 throne  
+  
+	# GNOME Desktop
+ 	 gnome-keyring            # credential storage
+ 	 gnome-terminal           # terminal emulator
+  
+ 	 # Filesystem Support
+ 	 ntfs3g                   # NTFS filesystem support
+ 	 woeusb                   # Windows USB creator
+  
+  	 # Security & Crypto
+  	 openssl                  # SSL/TLS toolkit
+  
+  	 # Graphics & Vulkan
+ 	 vulkan-headers           # Vulkan API headers
+ 	 hwdata                   # hardware identification database
+  
+ 	 # Work & Productivity
+ 	 hubstaff                 # time tracking software
+  
+	];
 
   # Secirity tools  
   security = {
@@ -170,7 +212,7 @@
   	polkit.enable = true;      # privilege escalation
 	};
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 
   # Nix garbage collection and optimization
   nix = {
@@ -199,7 +241,6 @@
  # Hardening for unsafe services
  systemd.services.thermald.serviceConfig = {
 	ProtectHome = true;              # no access to /home
-	ProtectSystem = "strict";        # read-only filesystem
 	PrivateTmp = true;               # isolated /tmp
 	NoNewPrivileges = true;          # no privilege escalation
 	};  
@@ -210,5 +251,11 @@
     SystemMaxFileSize=50M                # max file size 50MB
     MaxRetentionSec=1month               # keep logs for 1 month
   '';
-  
+
+  # Ipsec
+  services.strongswan = {
+    enable = true;
+    secrets = [ ];
+  };
+
 }
