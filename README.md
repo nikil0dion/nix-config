@@ -1,4 +1,4 @@
-# Simply NixOS Installation Guide with Btrfs and LUKS 25.05 😎
+# Simply NixOS Installation Guide with Btrfs and LUKS 25.11 😎
 
 **Installing a minimal working image of nixos**
 
