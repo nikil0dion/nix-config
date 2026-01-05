@@ -3,9 +3,9 @@
   imports = [ ];
 
   home = {
-      username = "nixos";
-      homeDirectory = "/home/nixos";
-      stateVersion = "25.05";
+   #   username = "nikilodion";
+   #   homeDirectory = "/home/nikilodion";
+      stateVersion = "25.11";
       packages = with pkgs; [
         alsa-utils
         amber-lang
@@ -17,6 +17,7 @@
         bottles-unwrapped
         caligula
         ctop
+        cacert
         d-spy
         dbeaver-bin
         dconf
@@ -33,7 +34,7 @@
         figma-linux
         file
         file-roller
-        floorp
+        floorp-bin
         gedit
         gimp
         gnome-calculator
@@ -44,18 +45,17 @@
         gnome-tweaks
         gnome-weather
         gnumake
+        google-chrome
         google-fonts-unstable
         grpcurl
-        gst-plugins-base
-        gst-plugins-good
-        gstreamer
-        gtk+3
+        gtk3
+        gtk4
         hamster
         htop
         httpie-desktop
         iptables
         jq
-        kdenlive
+        kdePackages.kdenlive
         keepassxc
         kubernetes
         ledger-live-desktop
@@ -66,11 +66,9 @@
         minio-client
         nautilus
         nchat
-        neofetch-unstable
         ninja
         nmap
         noto-fonts-color-emoji
-        nss-cacert
         obsidian
         pciutils
         postgresql
@@ -89,9 +87,16 @@
         unetbootin
         unzip
         valkey
+        vlc
+        vulkan-tools
+        warp-terminal
+        wget
         xdotool
         zip
         zoom
       ];
   };
+
+  # Let Home Manager manage itself
+  programs.home-manager.enable = true;
 }

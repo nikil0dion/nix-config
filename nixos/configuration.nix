@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./linux-kernel.nix
+      <home-manager/nixos>  # Home Manager module
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -34,18 +35,23 @@
 			  networkmanager-openvpn     # OpenVPN
 			];
 	};
-        #useNetworkd = true;
-  	#useDHCP = false;
- 	#interfaces.wlp2s0.useDHCP = true;  # if your use Wi-Fi
-  	#interfaces.eth0.useDHCP = true;   # if your use Ethernet
    }; 
  
-  ## Containerization and virtualization
-  users = { 
-	extraGroups = {
-		docker.members = [ "nikilodion" ];    # docker access
-		plugdev.members = [ "nikilodion" ];   # usb devices access (ledger, etc)
-		};
+  ## Users
+  users = {
+    users.nikilodion = {
+      isNormalUser = true;                    # regular user account
+      home = "/home/nikilodion";
+      group = "nikilodion";
+      extraGroups = [ 
+        "networkmanager"  # network settings
+        "docker"          # docker access
+        "plugdev"         # usb devices (ledger, etc)
+        "video"           # video devices
+        "audio"           # audio devices
+      ];
+    };
+    groups.nikilodion = {};                   # user's primary group
   };
   
   virtualisation = {
@@ -214,6 +220,13 @@ environment.systemPackages = with pkgs; [
 
   system.stateVersion = "25.11";
 
+  # Home Manager configuration
+  home-manager = {
+    useGlobalPkgs = true;      # use system pkgs
+    useUserPackages = true;    # install to /etc/profiles
+    users.nikilodion = import ./home.nix;  # /etc/nixos/home.nix
+  };
+
   # Nix garbage collection and optimization
   nix = {
     settings = {
@@ -231,19 +244,19 @@ environment.systemPackages = with pkgs; [
     };
   };
 
-  # Disabling inactive services 
+  # Disabling inactive services + hardening
   systemd.services = {
     NetworkManager-wait-online.enable = false;  # skip network wait
     systemd-networkd-wait-online.enable = false; # skip networkd wait
-    NetworkManager-dispatcher.enable = false;  # disable script dispatcher  
-  };
-	
- # Hardening for unsafe services
- systemd.services.thermald.serviceConfig = {
-	ProtectHome = true;              # no access to /home
-	PrivateTmp = true;               # isolated /tmp
-	NoNewPrivileges = true;          # no privilege escalation
-	};  
+    NetworkManager-dispatcher.enable = false;  # disable script dispatcher
+    
+    # Hardening for thermald
+    thermald.serviceConfig = {
+      ProtectHome = true;              # no access to /home
+      PrivateTmp = true;               # isolated /tmp
+      NoNewPrivileges = true;          # no privilege escalation
+    };
+  };  
 	
   # System logs cleanup
   services.journald.extraConfig = ''

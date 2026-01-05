@@ -1,9 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # Linux Kernel
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_12;
-  boot.kernelParams = [ 
+  boot.kernelParams = lib.mkAfter [ 
     "splash"
     "quiet"
     "fbcon=nodefer"
