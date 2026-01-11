@@ -45,6 +45,7 @@
         gnome-tweaks
         gnome-weather
         gnumake
+        grype
         google-chrome
         google-fonts-unstable
         grpcurl
@@ -72,13 +73,13 @@
         obsidian
         pciutils
         postgresql
-        qemu-host-cpu-only
         quickemu
         remmina
         sdkmanager
         snx-rs
         sops
         sysstat
+        subfinder
         telegram-desktop
         totem
         tradingview
@@ -91,7 +92,6 @@
         vulkan-tools
         warp-terminal
         wget
-        xdotool
         zip
         zoom
       ];
