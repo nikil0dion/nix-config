@@ -6,6 +6,11 @@
    #   username = "nikilodion";
    #   homeDirectory = "/home/nikilodion";
       stateVersion = "25.11";
+      
+      sessionVariables = {
+        MOZ_ENABLE_WAYLAND = "1";
+      };
+      
       packages = with pkgs; [
         alsa-utils
         amber-lang

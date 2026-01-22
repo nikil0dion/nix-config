@@ -184,6 +184,7 @@ environment.systemPackages = with pkgs; [
  	 iptables                 # firewall utilities
  	 openvpn                  # OpenVPN client
  	 strongswan               # IPsec VPN
+ 	 wireguard-tools          # WireGuard VPN
  	 xl2tpd                   # L2TP daemon
   
  	 # Proxy & Tunneling
@@ -244,6 +245,14 @@ environment.systemPackages = with pkgs; [
     };
   };
 
+  # Allow unfree packages globally
+  nixpkgs.config.allowUnfree = true;
+
+  # Environment variables
+  environment.variables = {
+    NIXPKGS_ALLOW_UNFREE = "1";
+  };
+
   # Disabling inactive services + hardening
   systemd.services = {
     NetworkManager-wait-online.enable = false;  # skip network wait
@@ -259,11 +268,17 @@ environment.systemPackages = with pkgs; [
   };  
 	
   # System logs cleanup
-  services.journald.extraConfig = ''
-    SystemMaxUse=100M                    # limit journal size to 100MB
-    SystemMaxFileSize=50M                # max file size 50MB
-    MaxRetentionSec=1month               # keep logs for 1 month
-  '';
+  services.journald = {
+    extraConfig = ''
+      SystemMaxUse=100M
+      SystemMaxFileSize=50M
+      MaxRetentionSec=1month
+      RuntimeMaxUse=50M
+      RuntimeMaxFileSize=25M
+    '';
+    rateLimitInterval = "30s";
+    rateLimitBurst = 10000;
+  };
 
   # Ipsec
   services.strongswan = {
