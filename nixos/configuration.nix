@@ -24,6 +24,14 @@
   i18n.defaultLocale = "en_US.UTF-8";      # system language
   console.keyMap = "us";                   # console keyboard layout
 
+  # Allow unfree packages globally
+  nixpkgs.config.allowUnfree = true;
+
+  # Environment variables
+  environment.variables = {
+    NIXPKGS_ALLOW_UNFREE = "1";
+  };
+
   ## Networking   
   networking = {
 	hostName = "www";                    # system hostname
@@ -52,6 +60,13 @@
       ];
     };
     groups.nikilodion = {};                   # user's primary group
+  };
+
+  # Home Manager configuration
+  home-manager = {
+    useGlobalPkgs = true;      # use system pkgs
+    useUserPackages = true;    # install to /etc/profiles
+    users.nikilodion = import ./home.nix;  # your home.nix
   };
   
   virtualisation = {
@@ -161,7 +176,7 @@
   		package = pkgs.bluez; 
 		};
 	ledger.enable = true;      # ledger hardware wallet support
-  };
+  };  
 
   # Default programs 
   programs = {
@@ -193,14 +208,13 @@ environment.systemPackages = with pkgs; [
  	 iptables                 # firewall utilities
  	 openvpn                  # OpenVPN client
  	 strongswan               # IPsec VPN
- 	 wireguard-tools          # WireGuard VPN
  	 xl2tpd                   # L2TP daemon
   
  	 # Proxy & Tunneling
- 	 nekoray                  # v2ray/xray GUI client
+ 	 throne                  # v2ray/xray GUI client
  	 sing-box                 # universal proxy platform
- 	 snx-rs                   # CheckPoint SNX VPN client
- 	 throne  
+ 	 snx-rs                   # CheckPoint SNX VPN client  
+ 	 wireguard-tools          # WireGuard VPN
   
 	# GNOME Desktop
  	 gnome-keyring            # credential storage
@@ -218,8 +232,7 @@ environment.systemPackages = with pkgs; [
  	 hwdata                   # hardware identification database
   
  	 # Work & Productivity
- 	 hubstaff                 # time tracking software
-  
+ 	 hubstaff                 # time tracking software  
 	];
 
   # Secirity tools  
@@ -229,13 +242,6 @@ environment.systemPackages = with pkgs; [
 	};
 
   system.stateVersion = "25.11";
-
-  # Home Manager configuration
-  home-manager = {
-    useGlobalPkgs = true;      # use system pkgs
-    useUserPackages = true;    # install to /etc/profiles
-    users.nikilodion = import ./home.nix;  # /etc/nixos/home.nix
-  };
 
   # Nix garbage collection and optimization
   nix = {
@@ -254,27 +260,20 @@ environment.systemPackages = with pkgs; [
     };
   };
 
-  # Allow unfree packages globally
-  nixpkgs.config.allowUnfree = true;
-
-  # Environment variables
-  environment.variables = {
-    NIXPKGS_ALLOW_UNFREE = "1";
-  };
-
-  # Disabling inactive services + hardening
+  # Disabling inactive services 
   systemd.services = {
     NetworkManager-wait-online.enable = false;  # skip network wait
     systemd-networkd-wait-online.enable = false; # skip networkd wait
-    NetworkManager-dispatcher.enable = false;  # disable script dispatcher
-    
-    # Hardening for thermald
-    thermald.serviceConfig = {
-      ProtectHome = true;              # no access to /home
-      PrivateTmp = true;               # isolated /tmp
-      NoNewPrivileges = true;          # no privilege escalation
-    };
-  };  
+    NetworkManager-dispatcher.enable = false;  # disable script dispatcher  
+  };
+	
+ # Hardening for unsafe services
+ systemd.services.thermald.serviceConfig = {
+	ProtectHome = true;              # no access to /home
+#	ProtectSystem = "strict";        # read-only filesystem
+	PrivateTmp = true;               # isolated /tmp
+	NoNewPrivileges = true;          # no privilege escalation
+	};  
 	
   # System logs cleanup
   services.journald = {
