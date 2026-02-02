@@ -3,14 +3,19 @@
   imports = [ ];
 
   home = {
-   #   username = "nikilodion";
-   #   homeDirectory = "/home/nikilodion";
+     # username = "nikilodion";
+     # homeDirectory = "/home/nikilodion";
       stateVersion = "25.11";
-      
+
       sessionVariables = {
         MOZ_ENABLE_WAYLAND = "1";
+        # Wayland touchscreen support
+        GDK_BACKEND = "wayland";           # GTK use wayland
+        QT_QPA_PLATFORM = "wayland";       # Qt use wayland
+        CLUTTER_BACKEND = "wayland";       # Clutter use wayland
+        SDL_VIDEODRIVER = "wayland";       # SDL use wayland
       };
-      
+
       packages = with pkgs; [
         alsa-utils
         amber-lang
@@ -19,10 +24,11 @@
         audacity
         bind
         bluez
-        bottles-unwrapped
+        bottles
         caligula
+	claude-code
         ctop
-        cacert
+	cacert
         d-spy
         dbeaver-bin
         dconf
@@ -34,6 +40,7 @@
         drawio
         duf
         eog
+	eza
         fd
         ffmpeg-full
         figma-linux
@@ -41,7 +48,7 @@
         file-roller
         floorp-bin
         gedit
-        gimp
+	gimp-with-plugins
         gnome-calculator
         gnome-characters
         gnome-disk-utility
@@ -50,12 +57,10 @@
         gnome-tweaks
         gnome-weather
         gnumake
-        grype
         google-chrome
-        google-fonts-unstable
         grpcurl
-        gtk3
         gtk4
+	gtk3
         hamster
         htop
         httpie-desktop
@@ -81,10 +86,9 @@
         quickemu
         remmina
         sdkmanager
-        snx-rs
         sops
-        sysstat
         subfinder
+        sysstat
         telegram-desktop
         totem
         tradingview

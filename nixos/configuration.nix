@@ -136,6 +136,14 @@
 	xl2tpd = { 
 		enable = true;   # ipsec daemon
 		};
+	libinput = {                 # touchscreen/touchpad support
+		enable = true;
+		touchpad = {
+			tapping = true;
+			naturalScrolling = true;
+			disableWhileTyping = true;
+			};
+		};
 	};
   
 
@@ -153,7 +161,7 @@
   		package = pkgs.bluez; 
 		};
 	ledger.enable = true;      # ledger hardware wallet support
-  };  
+  };
 
   # Default programs 
   programs = {
@@ -179,6 +187,7 @@ environment.systemPackages = with pkgs; [
  	 lm_sensors               # hardware monitoring (temp, fans)
   	 gnome-system-monitor     # system resource monitor
  	 undervolt                # CPU undervolting tool
+ 	 libinput                 # input device tools (touchscreen, touchpad)
   
  	 # Networking & VPN
  	 iptables                 # firewall utilities
