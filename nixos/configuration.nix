@@ -16,21 +16,29 @@
   boot = {
 	loader = {
 		systemd-boot.enable = true;     # modern efi bootloader
+			systemd-boot.configurationLimit = 10; # keep last 10 entries, auto-prune /boot
   		efi.canTouchEfiVariables = true; # allow efi modifications
   		};
+		extraModprobeConfig = ''
+			options iwlwifi power_save=0 disable_11ax=1
+		'';
 	};
   # Set your time zone and language 
   time.timeZone = "Europe/Madrid";          # timezone setting
   i18n.defaultLocale = "en_US.UTF-8";      # system language
   console.keyMap = "us";                   # console keyboard layout
 
-  # Allow unfree packages globally
-  nixpkgs.config.allowUnfree = true;
-
-  # Environment variables
-  environment.variables = {
-    NIXPKGS_ALLOW_UNFREE = "1";
-  };
+  # Allow only these specific unfree packages (no blanket allowUnfree)
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+      "google-chrome"
+      "zoom"
+      "warp-terminal"
+      "claude-code"
+      "tradingview"
+      "terraform"
+      "vault"
+    ];
 
   ## Networking   
   networking = {
@@ -38,10 +46,7 @@
 	firewall.enable = false;             # disabled firewall (security risk! но нужно для docker)
   	networkmanager = {
   		enable = true;                   # network connection manager
-		plugins = with pkgs; [
-  			  networkmanager-l2tp        # L2TP/IPsec
-			  networkmanager-openvpn     # OpenVPN
-			];
+		plugins = with pkgs; [	];
 	};
    }; 
  
@@ -76,9 +81,10 @@
 		daemon.settings = {
 			# Network and security
 			"ipv6" = false;              # disable IPv6
-			"ip-forward" = false;        # don't forward IP packets
+			"ip-forward" = true;        # don't forward IP packets
 			"iptables" = true;           # use iptables rules
-			"ip-masq" = false;           # disable IP masquerading
+			"ip-masq" = true;           # disable IP masquerading
+			"dns" = [ "1.1.1.1" "8.8.8.8" ]; # enable globaldns 
 			
 			# Security
 			"live-restore" = true;       # keep containers running during restart
@@ -98,7 +104,7 @@
   # Enable services in system.
   services = { 
 	displayManager = { 
-		gdm.wayland = true;   # use wayland in gdm
+	#	gdm.wayland = true;   # use wayland in gdm
         	gdm.enable = true;   # gnome display manager
 		};
         desktopManager.gnome.enable = true; # gnome desktop
@@ -148,9 +154,6 @@
 			fileSystems = [ "/" ];
 			};
 		};
-	xl2tpd = { 
-		enable = true;   # ipsec daemon
-		};
 	libinput = {                 # touchscreen/touchpad support
 		enable = true;
 		touchpad = {
@@ -188,8 +191,7 @@
   # $ nix search wget
 environment.systemPackages = with pkgs; [
  	 # Development & Version Control
- 	 git                      # version control system
-  
+ 	 git                      # version control system  
  	 # System Utilities
  	 e2fsprogs                # ext2/3/4 filesystem utilities
  	 fd                       # fast alternative to find
@@ -197,23 +199,20 @@ environment.systemPackages = with pkgs; [
  	 pciutils                 # PCI utilities (lspci)
  	 traceroute               # network diagnostic tool
  	 util-linux               # essential system utilities
+	 iw                       # wifi tools
   
  	 # Monitoring & Hardware
  	 lm_sensors               # hardware monitoring (temp, fans)
   	 gnome-system-monitor     # system resource monitor
  	 undervolt                # CPU undervolting tool
  	 libinput                 # input device tools (touchscreen, touchpad)
-  
+  	 htop 
+
  	 # Networking & VPN
  	 iptables                 # firewall utilities
  	 openvpn                  # OpenVPN client
- 	 strongswan               # IPsec VPN
- 	 xl2tpd                   # L2TP daemon
   
  	 # Proxy & Tunneling
- 	 throne                  # v2ray/xray GUI client
- 	 sing-box                 # universal proxy platform
- 	 snx-rs                   # CheckPoint SNX VPN client  
  	 wireguard-tools          # WireGuard VPN
   
 	# GNOME Desktop
@@ -228,11 +227,7 @@ environment.systemPackages = with pkgs; [
   	 openssl                  # SSL/TLS toolkit
   
   	 # Graphics & Vulkan
- 	 vulkan-headers           # Vulkan API headers
- 	 hwdata                   # hardware identification database
-  
- 	 # Work & Productivity
- 	 hubstaff                 # time tracking software  
+ 	 hwdata                   # hardware identification database  
 	];
 
   # Secirity tools  
@@ -241,7 +236,7 @@ environment.systemPackages = with pkgs; [
   	polkit.enable = true;      # privilege escalation
 	};
 
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
 
   # Nix garbage collection and optimization
   nix = {
@@ -270,7 +265,6 @@ environment.systemPackages = with pkgs; [
  # Hardening for unsafe services
  systemd.services.thermald.serviceConfig = {
 	ProtectHome = true;              # no access to /home
-#	ProtectSystem = "strict";        # read-only filesystem
 	PrivateTmp = true;               # isolated /tmp
 	NoNewPrivileges = true;          # no privilege escalation
 	};  
@@ -286,12 +280,6 @@ environment.systemPackages = with pkgs; [
     '';
     rateLimitInterval = "30s";
     rateLimitBurst = 10000;
-  };
-
-  # Ipsec
-  services.strongswan = {
-    enable = true;
-    secrets = [ ];
   };
 
 }
