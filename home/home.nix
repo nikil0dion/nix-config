@@ -3,22 +3,24 @@
     imports = [ ];                                                                                                                                                                
                                                                                                                                                                                   
     home = {                                                                                                                                                                      
-        stateVersion = "25.11";                                                                                                                                                   
+        stateVersion = "26.05";                                                                                                                                                   
                                                                                                                                                                                   
         sessionVariables = {                                                                                                                                                      
           MOZ_ENABLE_WAYLAND = "1";                                                                                                                                               
           GDK_BACKEND = "wayland";                                                                                                                                                
           QT_QPA_PLATFORM = "wayland";                                                                                                                                            
           CLUTTER_BACKEND = "wayland";                                                                                                                                            
-          SDL_VIDEODRIVER = "wayland";                                                                                                                                            
+          SDL_VIDEODRIVER = "wayland"; 
+	  NIXOS_OZONE_WL = "1";       # Chrome/Electron/Warp/Figma native Wayland
+                                                                                                                                           
         };                                                                                                                                                                        
                                                                                                                                                                                   
         packages = with pkgs; [                                                                                                                                                   
           # ═══════════════════════════════════════════                                                                                                                           
           # CLI Core                                                                                                                                                              
-          # ═══════════════════════════════════════════                                                                                                                           
-          ripgrep fd tree file wget unzip zip jq fx xh                                                                                                                            
-          rsync ouch                                                                                                                                                                        
+          # ═══════════════════════════════════════════                  
+          ripgrep fd tree file wget unzip zip jq fx xh                                                                                                           
+          rsync ouch exiftool                                                                                                                                                                          
           # ═══════════════════════════════════════════                                                                                                                           
           # System Monitoring                                                                                                                                                     
           # ═══════════════════════════════════════════                                                                                                                           
@@ -32,34 +34,36 @@
           # ═══════════════════════════════════════════                                                                                                                           
           # Git                                                                                                                                                                   
           # ═══════════════════════════════════════════                                                                                                                           
-          lazygit meld                                                                                                                                                            
+          lazygit meld gh                                                                                                                                                            
                                                                                                                                                                                   
           # ═══════════════════════════════════════════                                                                                                                           
           # Containers & K8s                                                                                                                                                      
           # ═══════════════════════════════════════════                                                                                                                           
-          docker docker-compose dive                                                                                                                                              
-          kubernetes k9s kubectx kubernetes-helm stern minikube                                                                                                                   
-                                                                                                                                                                                  
+          docker docker-compose dive lazydocker freelens-bin
+          kubernetes k9s kubectx kubernetes-helm stern minikube     
           # ═══════════════════════════════════════════                                                                                                                           
           # IaC & Cloud                                                                                                                                                           
           # ═══════════════════════════════════════════                                                                                                                           
           terraform opentofu sops awscli google-cloud-sdk                                                                                                                           
-          yandex-cloud                        
+          vault doctl terragrunt infracost
                                                                                                                                                                                   
           # ═══════════════════════════════════════════                                                                                                                           
           # Network & Security                                                                                                                                                    
           # ═══════════════════════════════════════════                                                                                                                           
-          bind nmap iptables lynis subfinder trivy sshpass                                                                                                                        
+          bind nmap iptables lynis subfinder trivy sshpass
+          doggo dog trippy gping bandwhich websocat
+          k6 oha vegeta cloudflared tailscale                
                                                                                                                                                                                   
           # ═══════════════════════════════════════════                                                                                                                           
           # Development                                                                                                                                                           
           # ═══════════════════════════════════════════                                                                                                                           
           golangci-lint grpcurl gnumake ninja amber-lang                                                                                                                          
-                                                                                                                                                                                  
+          nodejs_24 bun python3Packages.cfn-lint                                                                                                                                                                               
           # ═══════════════════════════════════════════                                                                                                                           
           # Database                                                                                                                                                              
           # ═══════════════════════════════════════════                                                                                                                           
-          postgresql dbeaver-bin valkey minio-client                                                                                                                              
+          postgresql dbeaver-bin valkey minio-client 
+	  clickhouse
                                                                                                                                                                                   
           # ═══════════════════════════════════════════                                                                                                                           
           # Android                                                                                                                                                               
@@ -102,7 +106,7 @@
           # ═══════════════════════════════════════════                                                                                                                           
           # Productivity                                                                                                                                                          
           # ═══════════════════════════════════════════                                                                                                                           
-          drawio figma-linux hamster keepassxc proton-pass tradingview                                                                                                            
+          drawio figma-linux proton-pass tradingview                                                                                                            
                                                                                                                                                                                   
           # ═══════════════════════════════════════════                                                                                                                           
           # Virtualization                                                                                                                                                        
@@ -123,4 +127,4 @@
     };                                                                                                                                                                            
                                                                                                                                                                                   
     programs.home-manager.enable = true;                                                                                                                                          
-}             
+}      
