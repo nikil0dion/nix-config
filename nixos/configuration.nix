@@ -4,6 +4,20 @@
 
 { config, lib, pkgs, ... }:
 
+let
+  # Единый список unfree — используется и системным nixpkgs, и unstable-инстансом
+  allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+      "google-chrome"
+      "zoom"
+      "warp-terminal"
+      "claude-code"
+      "tradingview"
+      "terraform"
+      "vault"
+    ];
+in
+
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -29,16 +43,28 @@
   console.keyMap = "us";                   # console keyboard layout
 
   # Allow only these specific unfree packages (no blanket allowUnfree)
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-      "google-chrome"
-      "zoom"
-      "warp-terminal"
-      "claude-code"
-      "tradingview"
-      "terraform"
-      "vault"
-    ];
+  nixpkgs.config.allowUnfreePredicate = allowUnfreePredicate;
+
+  # База системы остаётся на 26.05. Из nixos-unstable тянем только точечно —
+  # там, где отставание stable-канала реально мешает.
+  # Требует: sudo nix-channel --add https://channels.nixos.org/nixos-unstable nixos-unstable
+  nixpkgs.overlays = [
+    (final: prev:
+      let
+        unstable = import <nixos-unstable> {
+          inherit (prev.stdenv.hostPlatform) system;
+          config = { inherit allowUnfreePredicate; };  # отдельный инстанс — свой config
+        };
+      in
+      {
+        inherit unstable;  # pkgs.unstable.<name> — для разовых проб, без правки списков
+
+        # Подмена атрибутов: в home.nix имена остаются прежними.
+        inherit (unstable)
+          warp-terminal   # 26.05 застрял на 0.2026.04.15, паника в RowIterator
+          claude-code;    # релизы почти ежедневно
+      })
+  ];
 
   ## Networking   
   networking = {
