@@ -12,9 +12,12 @@ let
       "zoom"
       "warp-terminal"
       "claude-code"
+      "opencode"
+      "codex"
       "tradingview"
       "terraform"
       "vault"
+      "obsidian"
     ];
 in
 
@@ -30,7 +33,7 @@ in
   boot = {
 	loader = {
 		systemd-boot.enable = true;     # modern efi bootloader
-			systemd-boot.configurationLimit = 10; # keep last 10 entries, auto-prune /boot
+		systemd-boot.configurationLimit = 7; # keep last 7 entries, auto-prune /boot
   		efi.canTouchEfiVariables = true; # allow efi modifications
   		};
 		extraModprobeConfig = ''
@@ -62,19 +65,21 @@ in
         # Подмена атрибутов: в home.nix имена остаются прежними.
         inherit (unstable)
           warp-terminal   # 26.05 застрял на 0.2026.04.15, паника в RowIterator
-          claude-code;    # релизы почти ежедневно
+          opencode
+	  claude-code;    # релизы почти ежедневно
+          
       })
   ];
 
-  ## Networking   
+  ## Networking
   networking = {
 	hostName = "www";                    # system hostname
-	firewall.enable = false;             # disabled firewall (security risk! но нужно для docker)
+	firewall.enable = true;              # docker adds its own chains, no need to disable
   	networkmanager = {
   		enable = true;                   # network connection manager
-		plugins = with pkgs; [	];
+		# plugins left unset: empty list overrides defaults and drops vpn plugins
 	};
-   }; 
+   };
  
   ## Users
   users = {
@@ -88,6 +93,8 @@ in
         "plugdev"         # usb devices (ledger, etc)
         "video"           # video devices
         "audio"           # audio devices
+	"libvirtd"        # net virt
+	"kvm"		  # virtualization
       ];
     };
     groups.nikilodion = {};                   # user's primary group
@@ -101,15 +108,26 @@ in
   };
   
   virtualisation = {
+	libvirtd = {                         # kvm/qemu via libvirt
+		enable = true;
+		onBoot = "ignore";           # don't autostart guests on boot
+		onShutdown = "shutdown";     # shut guests down instead of suspending
+		qemu = {
+			runAsRoot = false;                   # run qemu as qemu-libvirtd
+			package = pkgs.qemu_kvm;
+			vhostUserPackages = [ pkgs.virtiofsd ]; # host dir sharing
+			};
+		};
+	spiceUSBRedirection.enable = true;   # usb passthrough via spice
 	docker = {                           # container platform
 		enable = true;
  		storageDriver = "btrfs";         # use btrfs for containers
 		daemon.settings = {
 			# Network and security
 			"ipv6" = false;              # disable IPv6
-			"ip-forward" = true;        # don't forward IP packets
+			"ip-forward" = true;         # forward IP packets between containers/host
 			"iptables" = true;           # use iptables rules
-			"ip-masq" = true;           # disable IP masquerading
+			"ip-masq" = true;            # enable IP masquerading for container egress
 			"dns" = [ "1.1.1.1" "8.8.8.8" ]; # enable globaldns 
 			
 			# Security
@@ -168,7 +186,8 @@ in
         uncoreOffset = -20;
  		analogioOffset = -20;
 		temp = 80;
-	       turbo = 0;
+	       turbo = 0;         # 0 = turbo stays enabled (flag is disable_turbo)
+		useTimer = true;   # reapply on timer, oneshot is lost after resume
 		};
 	fstrim = {                # ssd trim optimization
 		enable = true;
@@ -207,10 +226,11 @@ in
 	ledger.enable = true;      # ledger hardware wallet support
   };  
 
-  # Default programs 
+  # Default programs
   programs = {
 	firefox.enable = true;     # web browser
   	dconf.enable = true;       # gnome configuration
+	virt-manager.enable = true; # libvirt gui
   };
 
   # List packages installed in system profile. To search, run:
@@ -233,6 +253,10 @@ environment.systemPackages = with pkgs; [
  	 undervolt                # CPU undervolting tool
  	 libinput                 # input device tools (touchscreen, touchpad)
   	 htop 
+
+ 	 # Virtualization
+ 	 virtiofsd                # host dir sharing for guests
+ 	 spice-gtk                # spice client tools
 
  	 # Networking & VPN
  	 iptables                 # firewall utilities
@@ -260,6 +284,7 @@ environment.systemPackages = with pkgs; [
   security = {
 	rtkit.enable = true;       # realtime kit
   	polkit.enable = true;      # privilege escalation
+	apparmor.enable = true;    # lsm userspace + profiles, confines qemu
 	};
 
   system.stateVersion = "26.05";
@@ -267,7 +292,7 @@ environment.systemPackages = with pkgs; [
   # Nix garbage collection and optimization
   nix = {
     settings = {
-      auto-optimise-store = true;        # automatic store optimization
+      # auto-optimise-store dropped: nix.optimise below already does it weekly
       experimental-features = [ "nix-command" ]; # modern nix cli
     };
     gc = {                               # garbage collection
