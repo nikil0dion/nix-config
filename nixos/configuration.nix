@@ -5,19 +5,18 @@
 { config, lib, pkgs, ... }:
 
 let
-  # Единый список unfree — используется и системным nixpkgs, и unstable-инстансом
+  # Allow selected unfree packages from the system package set.
   allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
       "google-chrome"
       "zoom"
-      "warp-terminal"
-      "claude-code"
       "opencode"
-      "codex"
       "tradingview"
       "terraform"
       "vault"
       "obsidian"
+      "veracrypt"
+      "discord"
     ];
 in
 
@@ -47,29 +46,6 @@ in
 
   # Allow only these specific unfree packages (no blanket allowUnfree)
   nixpkgs.config.allowUnfreePredicate = allowUnfreePredicate;
-
-  # База системы остаётся на 26.05. Из nixos-unstable тянем только точечно —
-  # там, где отставание stable-канала реально мешает.
-  # Требует: sudo nix-channel --add https://channels.nixos.org/nixos-unstable nixos-unstable
-  nixpkgs.overlays = [
-    (final: prev:
-      let
-        unstable = import <nixos-unstable> {
-          inherit (prev.stdenv.hostPlatform) system;
-          config = { inherit allowUnfreePredicate; };  # отдельный инстанс — свой config
-        };
-      in
-      {
-        inherit unstable;  # pkgs.unstable.<name> — для разовых проб, без правки списков
-
-        # Подмена атрибутов: в home.nix имена остаются прежними.
-        inherit (unstable)
-          warp-terminal   # 26.05 застрял на 0.2026.04.15, паника в RowIterator
-          opencode
-	  claude-code;    # релизы почти ежедневно
-          
-      })
-  ];
 
   ## Networking
   networking = {
@@ -199,14 +175,6 @@ in
 			fileSystems = [ "/" ];
 			};
 		};
-	libinput = {                 # touchscreen/touchpad support
-		enable = true;
-		touchpad = {
-			tapping = true;
-			naturalScrolling = true;
-			disableWhileTyping = true;
-			};
-		};
 	};
   
 
@@ -230,7 +198,6 @@ in
   programs = {
 	firefox.enable = true;     # web browser
   	dconf.enable = true;       # gnome configuration
-	virt-manager.enable = true; # libvirt gui
   };
 
   # List packages installed in system profile. To search, run:
@@ -246,6 +213,7 @@ environment.systemPackages = with pkgs; [
  	 traceroute               # network diagnostic tool
  	 util-linux               # essential system utilities
 	 iw                       # wifi tools
+	 wl-clipboard             # wayland copy tool
   
  	 # Monitoring & Hardware
  	 lm_sensors               # hardware monitoring (temp, fans)
@@ -257,6 +225,9 @@ environment.systemPackages = with pkgs; [
  	 # Virtualization
  	 virtiofsd                # host dir sharing for guests
  	 spice-gtk                # spice client tools
+         virt-viewer
+	 passt
+	 veracrypt
 
  	 # Networking & VPN
  	 iptables                 # firewall utilities
@@ -268,7 +239,7 @@ environment.systemPackages = with pkgs; [
 	# GNOME Desktop
  	 gnome-keyring            # credential storage
  	 gnome-terminal           # terminal emulator
-  
+
  	 # Filesystem Support
  	 ntfs3g                   # NTFS filesystem support
  	 woeusb                   # Windows USB creator
